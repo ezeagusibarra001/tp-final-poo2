@@ -1,4 +1,4 @@
-package site;
+package property.search;
 
 import property.Property;
 

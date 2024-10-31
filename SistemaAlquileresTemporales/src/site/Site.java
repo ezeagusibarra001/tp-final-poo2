@@ -4,6 +4,7 @@ import java.util.List;
 
 import property.PropertiesManager;
 import property.Property;
+import property.search.Filter;
 import ranking.Rankeable;
 import ranking.RankingManager;
 import user.Owner;
