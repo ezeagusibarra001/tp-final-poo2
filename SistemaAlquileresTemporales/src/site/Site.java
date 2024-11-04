@@ -1,8 +1,8 @@
 package site;
 
 import java.util.List;
+import java.util.ArrayList;
 import booking.Booking; 
-
 import property.PropertiesManager;
 import property.Property;
 import property.search.Filter;
@@ -17,6 +17,7 @@ public class Site {
 	private PropertiesManager propertiesManager;
 	private RankingManager rankingManager;
 	private List<User> users;
+	private List<Booking> bookings;
 
 	/* CONSTRUCTOR */
 	public Site(String name, PropertiesManager propertiesManager, RankingManager rankingManager) {
@@ -24,6 +25,9 @@ public class Site {
 		this.setName(name);
 		this.setPropertiesManager(propertiesManager);
 		this.setRankingManager(rankingManager);
+		this.categories = new ArrayList<Category>();
+		this.users = new ArrayList<User>();
+		this.bookings = new ArrayList<Booking>();
 	}
 
 	/* METHODS */
@@ -46,6 +50,10 @@ public class Site {
 	public void requestBooking(Tenant t, Property p) {
 		if(p.isAvailable()) {
 			Booking b = new Booking(t, p.getOwner(), p);
+			b.confirm();
+			bookings.add(b); 
+		} else {
+			// podria lanzar una excepcion, un mensaje o no hacer nada
 		}
 	}
 
