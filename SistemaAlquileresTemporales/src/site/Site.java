@@ -1,14 +1,14 @@
 package site;
 
 import java.util.List;
+import booking.Booking; 
 
 import property.PropertiesManager;
 import property.Property;
 import property.search.Filter;
 import ranking.Rankeable;
 import ranking.RankingManager;
-import user.Owner;
-import user.User;
+import user.*;
 
 public class Site {
 	/* ATTRIBUTES */
@@ -41,6 +41,12 @@ public class Site {
 
 	public void rank(Rankeable r, Category c, int n) {
 		r.addRanking(c, n);
+	}
+	
+	public void requestBooking(Tenant t, Property p) {
+		if(p.isAvailable()) {
+			Booking b = new Booking(t, p.getOwner(), p);
+		}
 	}
 
 	/* GETTERS & SETTERS */

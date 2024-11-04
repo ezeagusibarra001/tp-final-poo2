@@ -2,6 +2,7 @@ package property;
 
 import java.util.Date;
 import java.util.List;
+import user.Owner;
 
 import property.enums.PaymentMethod;
 import property.enums.PropertyType;
@@ -24,6 +25,8 @@ public class Property implements Rankeable {
 	private List<Photo> photos;
 	private Location location;
 	private List<SpecialPrice> specialPrices;
+	private Owner owner; // falta asignarse
+	private boolean available;
 
 	/* CONSTRUCTOR */
 	public Property(PropertyType propertyType, int area, List<Ranked> rankings, Date time_check_in, Date time_check_out,
@@ -41,6 +44,7 @@ public class Property implements Rankeable {
 		this.setPhotos(photos);
 		this.setLocation(location);
 		this.setSpecialPrices(specialPrices);
+		this.setAvailable(true);
 	}
 
 	/* METHODS */
@@ -177,5 +181,18 @@ public class Property implements Rankeable {
 
 	private void setSpecialPrices(List<SpecialPrice> specialPrices) {
 		this.specialPrices = specialPrices;
+	}
+	
+	public Owner getOwner() {
+		return this.owner;
+	}
+	
+	public boolean isAvailable() {
+		// falta implementar puede reemplazar al metodo isAvailableBetween
+		return this.available;
+	}
+	
+	public void setAvailable(boolean b) {
+		this.available = b;
 	}
 }
