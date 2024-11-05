@@ -2,20 +2,19 @@ package property;
 
 import java.util.Date;
 import java.util.List;
-import user.Owner;
+import java.util.Map;
 
+import user.Owner;
 import property.enums.PaymentMethod;
 import property.enums.PropertyType;
 import property.enums.Service;
-import ranking.Rankeable;
-import ranking.Ranked;
-import site.Category;
+import site.*;
+import ranking.Ranking;
 
-public class Property implements Rankeable {
+public class Property{
 	/* ATTRIBUTES */
 	private PropertyType propertyType;
 	private int area;
-	private List<Ranked> rankings;
 	private Date time_check_in;
 	private Date time_check_out;
 	private double price;
@@ -27,14 +26,14 @@ public class Property implements Rankeable {
 	private List<SpecialPrice> specialPrices;
 	private Owner owner; // falta asignarse
 	private boolean available;
+	private Ranking ranking = new Ranking();
 
 	/* CONSTRUCTOR */
-	public Property(PropertyType propertyType, int area, List<Ranked> rankings, Date time_check_in, Date time_check_out,
+	public Property(PropertyType propertyType, int area, Date time_check_in, Date time_check_out,
 			double price, List<PaymentMethod> paymentMethods, int guests, List<Service> services, List<Photo> photos,
 			Location location, List<SpecialPrice> specialPrices) {
 		this.setPropertyType(propertyType);
 		this.setArea(area);
-		this.setRankings(rankings);
 		this.setTime_check_in(time_check_in);
 		this.setTime_check_out(time_check_out);
 		this.setPrice(price);
@@ -45,20 +44,6 @@ public class Property implements Rankeable {
 		this.setLocation(location);
 		this.setSpecialPrices(specialPrices);
 		this.setAvailable(true);
-	}
-
-	/* METHODS */
-	@Override
-	public void addRanking(Category c, int n) {
-		Ranked r = new Ranked();
-		this.getRankings().add(r);
-	}
-
-	@Override
-	public double getAvgRanking(Category c) {
-		return this.getRankings().stream().mapToInt(Ranked::getValue) // Convierte cada ranking a un int
-				.average() // Calcula el promedio
-				.orElse(0); // Devuelve 0 si la lista está vacía
 	}
 
 	public String getCity() {
@@ -85,6 +70,16 @@ public class Property implements Rankeable {
 	public void addSpecialPrice(SpecialPrice sp) {
 		this.getSpecialPrices().add(sp);
 	}
+	
+	// esto se compartiria con owner y tenant, donde deberia estar entonces?
+//	public double getTotalAvg(Site site) {
+//		return site.getRankingManager().calculateTotalAvg(this.getRanking());
+//	}
+//	
+//	public Map<Category, Double> getAvgPerCategory(Site site) {
+//		return site.getRankingManager().calculateAvgPerCategory(this.getRanking());
+//	}
+	
 
 	/* GETTERS & SETTERS */
 	public PropertyType getPropertyType() {
@@ -103,12 +98,8 @@ public class Property implements Rankeable {
 		this.area = area;
 	}
 
-	private List<Ranked> getRankings() {
-		return rankings;
-	}
-
-	private void setRankings(List<Ranked> rankings) {
-		this.rankings = rankings;
+	public Ranking getRanking() {
+		return this.ranking;
 	}
 
 	public Date getTime_check_in() {

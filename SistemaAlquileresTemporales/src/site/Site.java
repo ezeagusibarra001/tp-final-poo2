@@ -6,8 +6,8 @@ import booking.Booking;
 import property.PropertiesManager;
 import property.Property;
 import property.search.Filter;
-import ranking.Rankeable;
 import ranking.RankingManager;
+import ranking.RankingStrategy;
 import user.*;
 
 public class Site {
@@ -20,14 +20,13 @@ public class Site {
 	private List<Booking> bookings;
 
 	/* CONSTRUCTOR */
-	public Site(String name, PropertiesManager propertiesManager, RankingManager rankingManager) {
-		super();
+	public Site(String name, PropertiesManager propertiesManager, RankingStrategy strategy) {
 		this.setName(name);
 		this.setPropertiesManager(propertiesManager);
-		this.setRankingManager(rankingManager);
 		this.categories = new ArrayList<Category>();
 		this.users = new ArrayList<User>();
 		this.bookings = new ArrayList<Booking>();
+		this.rankingManager = new RankingManager(strategy);
 	}
 
 	/* METHODS */
@@ -43,9 +42,9 @@ public class Site {
 		return this.getPropertiesManager().search(fs);
 	}
 
-	public void rank(Rankeable r, Category c, int n) {
-		r.addRanking(c, n);
-	}
+//	public void rank(Rankeable r, Category c, int n) {
+//		r.addRanking(c, n);
+//	}
 	
 	public void requestBooking(Tenant t, Property p) {
 		if(p.isAvailable()) {
@@ -92,5 +91,9 @@ public class Site {
 
 	public List<User> getUsers() {
 		return users;
+	}
+	
+	public void setRankingStrategy(RankingStrategy strategy) {
+		this.rankingManager.setRankingStrategy(strategy);
 	}
 }
