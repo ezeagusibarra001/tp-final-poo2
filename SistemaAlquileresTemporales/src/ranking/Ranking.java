@@ -21,6 +21,11 @@ public class Ranking {
 		}
 	}
 	
+	public void addScores(Ranking ranking) {
+		List<Score> newScores = ranking.getScores();
+		this.scores.addAll(newScores);
+	}
+	
 	// Getters
 	public List<Score> getScores() {
 		return this.scores;

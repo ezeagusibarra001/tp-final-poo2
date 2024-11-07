@@ -1,13 +1,17 @@
 package site;
 
 import java.util.List;
+
 import java.util.ArrayList;
+import java.util.Date;
+import ranking.Ranking;
 import booking.Booking; 
 import property.PropertiesManager;
 import property.Property;
 import property.search.Filter;
 import ranking.RankingManager;
 import ranking.RankingStrategy;
+import ranking.RankingType;
 import user.*;
 
 public class Site {
@@ -46,15 +50,24 @@ public class Site {
 //		r.addRanking(c, n);
 //	}
 	
-	public void requestBooking(Tenant t, Property p) {
-		if(p.isAvailable()) {
-			Booking b = new Booking(t, p.getOwner(), p);
-			b.confirm();
-			bookings.add(b); 
+	public void requestBooking(Tenant tenant, Property property, Date checkInDate, Date checkOutDate) {
+		if(property.isAvailable()) {
+			Booking booking = new Booking(tenant, property.getOwner(), property, checkInDate, checkOutDate);
+			booking.confirm();
+			bookings.add(booking); 
 		} else {
 			// podria lanzar una excepcion, un mensaje o no hacer nada
 		}
 	}
+	
+	// Se espera el siguiente orden: [rankingTenant, rankingOwner, rankingProperty]
+	public void makeCheckout(Booking booking, List<Ranking> rankings) {
+	    if (rankings.size() != RankingType.values().length) {
+	        throw new IllegalArgumentException("La cantidad de rankings no es correcta");
+	    }
+		booking.makeCheckout(rankings);
+		// calcular promedios para las tres entidades y almacenar, clase Visualizacion??
+	 }
 
 	/* GETTERS & SETTERS */
 	public String getName() {
