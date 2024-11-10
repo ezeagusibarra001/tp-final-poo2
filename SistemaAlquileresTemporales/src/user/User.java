@@ -1,12 +1,11 @@
 package user;
 
-import site.Category;
 import ranking.Ranking;
 import property.Property;
 
 public abstract class User {
 	// pueden cambiar a protected
-	private String fullName;
+	protected String fullName;
 	private String email;
 	private int phone;
 	private Ranking ranking;

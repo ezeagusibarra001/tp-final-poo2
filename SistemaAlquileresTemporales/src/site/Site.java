@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
 import ranking.Ranking;
-import booking.Booking; 
+import booking.Booking;
+import comment.Comment;
+import comment.CommentManager;
 import property.PropertiesManager;
 import property.Property;
 import property.search.Filter;
@@ -22,6 +24,7 @@ public class Site {
 	private RankingManager rankingManager;
 	private List<User> users;
 	private List<Booking> bookings;
+	private CommentManager commentManager;
 
 	/* CONSTRUCTOR */
 	public Site(String name, PropertiesManager propertiesManager, RankingStrategy strategy) {
@@ -31,6 +34,7 @@ public class Site {
 		this.users = new ArrayList<User>();
 		this.bookings = new ArrayList<Booking>();
 		this.rankingManager = new RankingManager(strategy);
+		this.commentManager = new CommentManager();
 	}
 
 	/* METHODS */
@@ -46,10 +50,6 @@ public class Site {
 		return this.getPropertiesManager().search(fs);
 	}
 
-//	public void rank(Rankeable r, Category c, int n) {
-//		r.addRanking(c, n);
-//	}
-	
 	public void requestBooking(Tenant tenant, Property property, Date checkInDate, Date checkOutDate) {
 		if(property.isAvailable()) {
 			Booking booking = new Booking(tenant, property.getOwner(), property, checkInDate, checkOutDate);
@@ -66,8 +66,20 @@ public class Site {
 	        throw new IllegalArgumentException("La cantidad de rankings no es correcta");
 	    }
 		booking.makeCheckout(rankings);
-		// calcular promedios para las tres entidades y almacenar, clase Visualizacion??
-	 }
+		
+		Owner owner = booking.getOwner();
+		Property property = booking.getProperty();
+		Tenant tenant = booking.getTenant();
+		
+		this.rankingManager.calculateAvgPerCategory(owner.getRanking());
+		this.rankingManager.calculateAvgPerCategory(property.getRanking());
+		this.rankingManager.calculateAvgPerCategory(tenant.getRanking());
+		// faltan guardar los calculos en una clase view
+	}
+	    
+	    public void addComment(Comment comment) {
+	    	this.getCommentManager().addComment(comment);
+	    }
 
 	/* GETTERS & SETTERS */
 	public String getName() {
@@ -108,5 +120,9 @@ public class Site {
 	
 	public void setRankingStrategy(RankingStrategy strategy) {
 		this.rankingManager.setRankingStrategy(strategy);
+	}
+	
+	private CommentManager getCommentManager() {
+		return this.commentManager;
 	}
 }

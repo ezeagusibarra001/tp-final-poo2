@@ -2,8 +2,6 @@ package property;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 import user.Owner;
 import property.enums.PaymentMethod;
 import property.enums.PropertyType;
