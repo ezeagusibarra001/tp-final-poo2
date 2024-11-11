@@ -20,7 +20,7 @@ import ranking.RankingType;
 import user.*;
 
 public class Site {
-	private String name; // por que el site tiene name??
+	private String name;
 	private List<Category> categories;
 	private PropertiesManager propertiesManager;
 	private RankingManager rankingManager;
@@ -29,7 +29,7 @@ public class Site {
     private Map<User, SiteStats> statsByUser;
 
 	public Site(String name, PropertiesManager propertiesManager, RankingStrategy strategy) {
-//		this.setName(name);
+		this.setName(name);
 		this.setPropertiesManager(propertiesManager);
 		this.categories = new ArrayList<Category>();
 		this.bookings = new ArrayList<Booking>();
@@ -39,14 +39,14 @@ public class Site {
 	}
 		
 	// Getters
-//	private String getName() {
-//		return name;
-//	}
+	public String getName() {
+		return name;
+	}
 	
-//	private List<Category> getCategories() {
-//		return categories;
-//	}
-//	
+	public List<Category> getCategories() {
+		return categories;
+	}
+	
 	private PropertiesManager getPropertiesManager() {
 		return propertiesManager;
 	}
@@ -60,9 +60,9 @@ public class Site {
 	}
 	
 	// Setters
-//	private void setName(String name) {
-//		this.name = name;
-//	}
+	private void setName(String name) {
+		this.name = name;
+	}
 
 //	private void setCategories(List<Category> categories) {
 //		this.categories = categories;

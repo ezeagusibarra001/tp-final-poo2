@@ -1,5 +1,6 @@
 package property;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,35 +9,25 @@ import site.Site;
 import user.Owner;
 
 public class PropertiesManager {
-	private Site site; // ES NECESARIO TENER EL SITE ACA?
 	private List<Property> properties;
-	// private List<Filter> searchFilter; ???? o es por param no mas
 
-	// ESTE CONSTRUCTOR ESTA DE MAS?
-	public PropertiesManager(Site site) {
-		this.setSite(site);
+	public PropertiesManager() {
+		this.setProperties(new ArrayList<Property>());
 	}
 	
 	public PropertiesManager(Site site, List<Property> properties) {
-		this.setSite(site);
 		this.setProperties(properties);
 	}
 	
 	// Getters
-	public Site getSite() {
-		return site;
-	}
 	
 	public List<Property> getProperties() {
 		return properties;
 	}
 	
 	// Setters
-	public void setSite(Site site) {
-		this.site = site;
-	}
 	
-	public void setProperties(List<Property> properties) {
+	public void setProperties(List<Property> properties) { 
 		this.properties = properties;
 	}
 	
