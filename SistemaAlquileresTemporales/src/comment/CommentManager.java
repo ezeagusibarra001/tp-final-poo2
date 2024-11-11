@@ -16,9 +16,14 @@ public class CommentManager {
 		this.comments.add(comment);
 	}
 	
-	public List<Comment> showComments(Property property) {
+	public List<Comment> filterComments(Property property) {
 		return comments.stream()
 			      .filter(comment -> comment.getProperty().equals(property))
 			      .collect(Collectors.toList());
+	}
+	
+	public void showComments(List<Comment> comments) {
+		comments.stream()
+		.forEach(comment -> comment.showComment());
 	}
 }
