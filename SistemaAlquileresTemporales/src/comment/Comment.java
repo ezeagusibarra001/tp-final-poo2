@@ -50,7 +50,8 @@ public class Comment {
 		this.property = property;
 	}
 	
-	// Methods
+	// ------------------------------------------------------
+	
 	public String showComment() {
 		return "Autor: "	   + this.getAuthor()   +
 			   "\nPropiedad: " + this.getProperty() +

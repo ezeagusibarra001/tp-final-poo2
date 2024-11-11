@@ -8,52 +8,53 @@ import site.Site;
 import user.Owner;
 
 public class PropertiesManager {
-	/* ATTRIBUTES */
-	private Site site;
+	private Site site; // ES NECESARIO TENER EL SITE ACA?
 	private List<Property> properties;
 	// private List<Filter> searchFilter; ???? o es por param no mas
 
-	/* CONSTRUCTOR */
+	// ESTE CONSTRUCTOR ESTA DE MAS?
 	public PropertiesManager(Site site) {
-		super();
 		this.setSite(site);
 	}
-
+	
 	public PropertiesManager(Site site, List<Property> properties) {
-		super();
 		this.setSite(site);
 		this.setProperties(properties);
 	}
-
-	/* METHODS */
-	public void post(Property p, Owner o) {
-		// o.postProperty(p);
-		this.getProperties().add(p);
-	}
-
-	public List<Property> search(List<Filter> fs) {
-		return this.getProperties().stream().filter(p -> this.passFilter(p, fs)).collect(Collectors.toList());
-	}
-
-	private boolean passFilter(Property p, List<Filter> fs) {
-		return fs.stream().allMatch(filter -> filter.matches(p));
-	}
-
-	/* GETTERS & SETTERS */
+	
+	// Getters
 	public Site getSite() {
 		return site;
 	}
-
-	public void setSite(Site site) {
-		this.site = site;
-	}
-
+	
 	public List<Property> getProperties() {
 		return properties;
 	}
-
+	
+	// Setters
+	public void setSite(Site site) {
+		this.site = site;
+	}
+	
 	public void setProperties(List<Property> properties) {
 		this.properties = properties;
 	}
+	
+	// ------------------------------------------------------
 
+	public void post(Property property, Owner owner) {
+		// o.postProperty(p);
+		this.getProperties().add(property); // si se usa el primer constructor esto falla, no se inicializa properties
+	}
+
+	public List<Property> search(List<Filter> filters) {
+		return this.getProperties().stream()
+				.filter(p -> this.passFilter(p, filters))
+				.collect(Collectors.toList());
+	}
+
+	private boolean passFilter(Property property, List<Filter> filters) {
+		return filters.stream()
+				.allMatch(filter -> filter.matches(property));
+	}
 }

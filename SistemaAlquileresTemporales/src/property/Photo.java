@@ -4,16 +4,14 @@ public class Photo {
 	private String url;
 
 	public Photo(String url) {
-		super();
 		this.setUrl(url);
 	}
 
-	public String getUrl() {
+	private String getUrl() {
 		return url;
 	}
-
+	
 	private void setUrl(String url) {
 		this.url = url;
 	}
-
 }

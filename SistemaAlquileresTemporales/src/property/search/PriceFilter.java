@@ -7,7 +7,7 @@ import property.Property;
 public class PriceFilter implements Filter {
 	private double minPrice;
 	private double maxPrice;
-	private Date startDate;
+	private Date startDate; // SE USAN LOS DATE?
 	private Date endDate;
 
 	public PriceFilter(double minPrice, double maxPrice, Date startDate, Date endDate) {
@@ -18,42 +18,46 @@ public class PriceFilter implements Filter {
 		this.setEndDate(endDate);
 	}
 
-	@Override
-	public boolean matches(Property p) {
-		return p.getHighestPriceBetween(startDate, endDate) <= this.getMaxPrice()
-				&& p.getLowerPriceBetween(startDate, endDate) >= this.getMinPrice();
-	}
-
-	public double getMinPrice() {
+	// Getters
+	private double getMinPrice() {
 		return minPrice;
 	}
-
-	private void setMinPrice(double minPrice) {
-		this.minPrice = minPrice;
-	}
-
-	public double getMaxPrice() {
+	
+	private double getMaxPrice() {
 		return maxPrice;
 	}
-
-	private void setMaxPrice(double maxPrice) {
-		this.maxPrice = maxPrice;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	private void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
+	
+	// SON NECESARIO ESTOS DOS METODOS? EN QUE MOMENTO SE USAN?
+//	private Date getEndDate() {
+//		return endDate;
+//	}
+//	
+//	private Date getStartDate() {
+//		return startDate;
+//	}
+	
+	// Setters
 	private void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-
+	
+	private void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	
+	private void setMinPrice(double minPrice) {
+		this.minPrice = minPrice;
+	}
+	
+	private void setMaxPrice(double maxPrice) {
+		this.maxPrice = maxPrice;
+	}
+	
+	// ------------------------------------------------------
+	
+	@Override
+	public boolean matches(Property property) {
+		return property.getHighestPriceBetween(startDate, endDate) <= this.getMaxPrice()
+				&& property.getLowerPriceBetween(startDate, endDate) >= this.getMinPrice();
+	}
 }

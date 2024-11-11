@@ -7,9 +7,9 @@ public class Category {
 		this.setName(name);
 	}
 
-	public String getName() {
-		return name;
-	}
+//	private String getName() {
+//		return name;
+//	}
 
 	private void setName(String name) {
 		this.name = name;

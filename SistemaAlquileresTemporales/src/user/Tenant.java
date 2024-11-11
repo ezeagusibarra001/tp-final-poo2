@@ -16,7 +16,13 @@ public class Tenant extends User {
 	public Tenant(String fullName, String email, int phone) {
 		super(fullName, email, phone);
 	}
-	
+
+	public String getFullName() {
+		return this.fullName;
+	}
+
+	// ------------------------------------------------------
+
 	@Override
 	public void additionalRatings(Property property, Ranking ranking) {
 		property.getRanking().addScores(ranking);
@@ -28,10 +34,6 @@ public class Tenant extends User {
 		// implementar logica de dos pasos
 		this.addProperty(property);
 		
-	}
-	
-	public String getFullName() {
-		return this.fullName;
 	}
 	
 	public void addProperty(Property property) {

@@ -12,6 +12,8 @@ public class CommentManager {
 		this.comments = new ArrayList<Comment>();
 	}
 	
+	// ------------------------------------------------------
+	
 	public void addComment(Comment comment) {
 		this.comments.add(comment);
 	}
