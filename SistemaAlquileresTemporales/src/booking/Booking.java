@@ -25,33 +25,6 @@ public class Booking {
 		this.isCompleted = false; // falta setter
 	}
 	
-	public void makeCheckout(List<Ranking> rankings) {
-        if (this.isCompleted()) {
-            throw new IllegalStateException("Reserva completada");
-        }
-        
-        this.isCompleted = true; // falta setter
-        this.getProperty().setAvailable(true);
-        this.enableRankings(rankings);
-	}
-	
-	private void enableRankings(List<Ranking> rankings) { 
-		Ranking tenantRanking = rankings.get(RankingType.TENANT.ordinal());
-		Ranking ownerRanking = rankings.get(RankingType.OWNER.ordinal());
-		Ranking propertyRanking = rankings.get(RankingType.PROPERTY.ordinal());
-		  
-		this.getTenant().rateAfterCheckout(owner, property, ownerRanking, propertyRanking); // Tenant rankea owner y property
-		this.getOwner().rateAfterCheckout(owner, property, tenantRanking, propertyRanking); // owner rankea tenant
-	}
-	
-	public void confirm() {
-		if (property.isAvailable()) { // puede cambiar por el otro metodo de property
-			this.isCompleted = true;
-			property.setAvailable(false);
-			// notificaciones
-		}
-	}
-	
 	// Getters
 	public Owner getOwner() {
 		return this.owner;
@@ -88,5 +61,34 @@ public class Booking {
 
 	private void setCheckOutDate(Date date) {
 		this.checkOutDate = date;
+	}
+	
+	// ------------------------------------------------------
+
+	public void makeCheckout(List<Ranking> rankings) {
+        if (this.isCompleted()) {
+            throw new IllegalStateException("Reserva completada");
+        }
+        
+        this.isCompleted = true; // falta setter
+        this.getProperty().setAvailable(true);
+        this.enableRankings(rankings);
+	}
+	
+	private void enableRankings(List<Ranking> rankings) { 
+		Ranking tenantRanking = rankings.get(RankingType.TENANT.ordinal());
+		Ranking ownerRanking = rankings.get(RankingType.OWNER.ordinal());
+		Ranking propertyRanking = rankings.get(RankingType.PROPERTY.ordinal());
+		  
+		this.getTenant().rateAfterCheckout(owner, property, ownerRanking, propertyRanking); // Tenant rankea owner y property
+		this.getOwner().rateAfterCheckout(owner, property, tenantRanking, propertyRanking); // owner rankea tenant
+	}
+	
+	public void confirm() {
+		if (property.isAvailable()) { // puede cambiar por el otro metodo de property
+			this.isCompleted = true;
+			property.setAvailable(false);
+			// notificaciones
+		}
 	}
 }

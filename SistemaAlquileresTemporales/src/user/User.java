@@ -1,12 +1,11 @@
 package user;
 
-import site.Category;
 import ranking.Ranking;
 import property.Property;
 
 public abstract class User {
 	// pueden cambiar a protected
-	private String fullName;
+	protected String fullName;
 	private String email;
 	private int phone;
 	private Ranking ranking;
@@ -18,17 +17,6 @@ public abstract class User {
 		this.ranking = new Ranking();
 	}
 	
-	public final void rateAfterCheckout(User otherUser, Property property, Ranking rankingUser, Ranking rankingProperty) {
-		this.rateUser(otherUser, rankingUser);
-		this.additionalRatings(property, rankingProperty);
-	}
-	
-	private void rateUser(User user, Ranking ranking) {
-		user.getRanking().addScores(ranking);
-	}
-	
-	protected void additionalRatings(Property property, Ranking ranking) {}
-
 	// Getters
     public Ranking getRanking() {
     	return this.ranking;
@@ -45,4 +33,17 @@ public abstract class User {
 	private void setPhone(int phone) {
 		this.phone = phone;
 	}
+	
+	// ------------------------------------------------------
+	
+	public final void rateAfterCheckout(User otherUser, Property property, Ranking rankingUser, Ranking rankingProperty) {
+		this.rateUser(otherUser, rankingUser);
+		this.additionalRatings(property, rankingProperty);
+	}
+	
+	private void rateUser(User user, Ranking ranking) {
+		user.getRanking().addScores(ranking);
+	}
+	
+	protected void additionalRatings(Property property, Ranking ranking) {}
 }

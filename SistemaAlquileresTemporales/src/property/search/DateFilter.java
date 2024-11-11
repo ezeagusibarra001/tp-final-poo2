@@ -9,30 +9,32 @@ public class DateFilter implements Filter {
 	private Date endDate;
 
 	public DateFilter(Date startDate, Date endDate) {
-		super();
 		this.setStartDate(startDate);
 		this.setEndDate(endDate);
 	}
-
-	@Override
-	public boolean matches(Property p) {
-		return p.isAvailableBetween(this.getStartDate(), this.getEndDate());
-	}
-
-	public Date getEndDate() {
+	
+	// Getters
+	private Date getEndDate() {
 		return endDate;
 	}
-
+	
+	private Date getStartDate() {
+		return startDate;
+	}
+	
+	// Setters
 	private void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
+	
 	private void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
+	
+	// ------------------------------------------------------
 
+	@Override
+	public boolean matches(Property property) {
+		return property.isAvailableBetween(this.getStartDate(), this.getEndDate());
+	}
 }

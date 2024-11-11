@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ArrayList;
 import site.Category;
 
-
 public class Ranking {
 	private List<Score> scores;
 	
@@ -12,6 +11,12 @@ public class Ranking {
 		this.scores = new ArrayList<Score>();
 	}
 	
+	public List<Score> getScores() {
+		return this.scores;
+	}
+
+	// ------------------------------------------------------
+
 	public void addScore(Category category, int value) {
 		if (value >= 1 && value <= 5) {
 			Score s = new Score(category, value);
@@ -24,10 +29,5 @@ public class Ranking {
 	public void addScores(Ranking ranking) {
 		List<Score> newScores = ranking.getScores();
 		this.scores.addAll(newScores);
-	}
-	
-	// Getters
-	public List<Score> getScores() {
-		return this.scores;
 	}
 }

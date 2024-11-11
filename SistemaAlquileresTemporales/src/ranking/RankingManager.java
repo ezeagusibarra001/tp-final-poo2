@@ -11,16 +11,17 @@ public class RankingManager {
     	this.setRankingStrategy(strategy);
     }
     
+    public void setRankingStrategy(RankingStrategy strategy) {
+    	this.rankingStrategy = strategy;
+    }
+    
+	// ------------------------------------------------------
+    
 	public double calculateTotalAvg(Ranking ranking) {
 		return rankingStrategy.calculateTotalAvg(ranking);
 	}
     
 	public Map<Category, Double> calculateAvgPerCategory(Ranking ranking) {
 		return rankingStrategy.calculateAvgPerCategory(ranking);
-	}
-	
-	// Setters
-    public void setRankingStrategy(RankingStrategy strategy) {
-    	this.rankingStrategy = strategy;
-    }
+	}	
 }

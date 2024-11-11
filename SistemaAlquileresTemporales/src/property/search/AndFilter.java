@@ -8,29 +8,30 @@ public class AndFilter implements Filter {
 	private List<Filter> filters;
 
 	public AndFilter(List<Filter> filters) {
-		super();
 		this.setFilters(filters);
 	}
-
-	@Override
-	public boolean matches(Property p) {
-		return this.filters.stream().allMatch(filter -> filter.matches(p));
-	}
-
-	public List<Filter> getFilters() {
+	
+	private List<Filter> getFilters() {
 		return filters;
 	}
-
+	
 	private void setFilters(List<Filter> filters) {
 		this.filters = filters;
 	}
 
-	public void addFilters(Filter f) {
-		this.getFilters().add(f);
+	// ------------------------------------------------------
+
+	@Override
+	public boolean matches(Property property) {
+		return this.filters.stream()
+				.allMatch(filter -> filter.matches(property));
 	}
 
-	public void removeFilters(Filter f) {
-		this.getFilters().remove(f);
+	public void addFilters(Filter filter) {
+		this.getFilters().add(filter);
 	}
 
+	public void removeFilters(Filter filter) {
+		this.getFilters().remove(filter);
+	}
 }

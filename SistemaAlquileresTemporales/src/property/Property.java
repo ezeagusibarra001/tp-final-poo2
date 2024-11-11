@@ -2,8 +2,6 @@ package property;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 import user.Owner;
 import property.enums.PaymentMethod;
 import property.enums.PropertyType;
@@ -12,7 +10,6 @@ import site.*;
 import ranking.Ranking;
 
 public class Property{
-	/* ATTRIBUTES */
 	private PropertyType propertyType;
 	private int area;
 	private Date time_check_in;
@@ -28,7 +25,6 @@ public class Property{
 	private boolean available;
 	private Ranking ranking = new Ranking();
 
-	/* CONSTRUCTOR */
 	public Property(PropertyType propertyType, int area, Date time_check_in, Date time_check_out,
 			double price, List<PaymentMethod> paymentMethods, int guests, List<Service> services, List<Photo> photos,
 			Location location, List<SpecialPrice> specialPrices) {
@@ -45,42 +41,8 @@ public class Property{
 		this.setSpecialPrices(specialPrices);
 		this.setAvailable(true);
 	}
-
-	public String getCity() {
-		return this.getLocation().getCity();
-	}
-
-	public boolean isAvailableBetween(Date startDate, Date endDate) {
-		// Tendra que chequear las bookings del site??
-		return true;
-	}
-
-	public double getHighestPriceBetween(Date startDate, Date endDate) {
-		return this.getSpecialPrices().stream()
-				.filter(sp -> !sp.getEndDate().before(startDate) && !sp.getStartDate().after(endDate))
-				.mapToDouble(SpecialPrice::getPrice).max().orElse(this.getPrice());
-	}
-
-	public double getLowerPriceBetween(Date startDate, Date endDate) {
-		return this.getSpecialPrices().stream()
-				.filter(sp -> !sp.getEndDate().before(startDate) && !sp.getStartDate().after(endDate))
-				.mapToDouble(SpecialPrice::getPrice).min().orElse(this.getPrice());
-	}
-
-	public void addSpecialPrice(SpecialPrice sp) {
-		this.getSpecialPrices().add(sp);
-	}
 	
-	// esto se compartiria con owner y tenant, donde deberia estar entonces?
-//	public double getTotalAvg(Site site) {
-//		return site.getRankingManager().calculateTotalAvg(this.getRanking());
-//	}
-//	
-//	public Map<Category, Double> getAvgPerCategory(Site site) {
-//		return site.getRankingManager().calculateAvgPerCategory(this.getRanking());
-//	}
-	
-
+	// Revisar usos y visualizacion
 	/* GETTERS & SETTERS */
 	public PropertyType getPropertyType() {
 		return propertyType;
@@ -183,7 +145,44 @@ public class Property{
 		return this.available;
 	}
 	
-	public void setAvailable(boolean b) {
-		this.available = b;
+	public void setAvailable(boolean bool) {
+		this.available = bool;
+	}
+
+	// ------------------------------------------------------
+	
+	public boolean isAvailableBetween(Date startDate, Date endDate) {
+		// Tendra que chequear las bookings del site??
+		return true;
+	}
+
+	public double getHighestPriceBetween(Date startDate, Date endDate) {
+		return this.getSpecialPrices().stream()
+				.filter(sp -> !sp.getEndDate().before(startDate) && !sp.getStartDate().after(endDate))
+				.mapToDouble(SpecialPrice::getPrice)
+				.max().orElse(this.getPrice());
+	}
+
+	public double getLowerPriceBetween(Date startDate, Date endDate) {
+		return this.getSpecialPrices().stream()
+				.filter(sp -> !sp.getEndDate().before(startDate) && !sp.getStartDate().after(endDate))
+				.mapToDouble(SpecialPrice::getPrice)
+				.min().orElse(this.getPrice());
+	}
+
+	public void addSpecialPrice(SpecialPrice specialPrice) {
+		this.getSpecialPrices().add(specialPrice);
+	}
+	
+	public void showDetails() {
+		 System.out.println("Detalles de propiedad:");
+		 System.out.println("Tipo: " 		+ this.getPropertyType());
+		 System.out.println("Superficie: "  + this.getArea());
+		 System.out.println("Precio: " 		+ this.getPrice());
+		 System.out.println("Pais: " 		+ this.getLocation().getCountry());
+		 System.out.println("Ciudad: " 		+ this.getLocation().getCity());
+		 System.out.println("Direccion: " 	+ this.getLocation().getAddress());
+		 System.out.println("Capacidad: "   + this.getGuests());
+//		 faltan serivios, fotos, check-in check-out, metodos de pago 
 	}
 }

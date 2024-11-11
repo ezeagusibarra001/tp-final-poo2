@@ -6,7 +6,11 @@ import java.util.stream.Collectors;
 import site.Category;
 
 public class SimpleRankingStrategy implements RankingStrategy {
-
+	
+	public SimpleRankingStrategy() {}
+	
+	// ------------------------------------------------------
+	
 	@Override
 	public double calculateTotalAvg(Ranking ranking) {
 		return ranking.getScores().stream()
@@ -27,5 +31,4 @@ public class SimpleRankingStrategy implements RankingStrategy {
 
         return averages;
 	}
-
 }

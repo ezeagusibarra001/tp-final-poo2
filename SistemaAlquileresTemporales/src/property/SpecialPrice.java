@@ -4,38 +4,38 @@ import java.util.Date;
 
 public class SpecialPrice {
 	private double price;
-	private Date startDate;
+	private Date startDate; // conviene cambiar por LocalDate?
 	private Date endDate;
 
 	public SpecialPrice(double price, Date startDate, Date endDate) {
-		super();
 		this.setPrice(price);
 		this.setStartDate(startDate);
 		this.setEndDate(endDate);
 	}
 
+	// Getters
 	public double getPrice() {
 		return price;
 	}
 
-	private void setPrice(double price) {
-		this.price = price;
-	}
-
 	public Date getStartDate() {
 		return startDate;
+	}
+	
+	public Date getEndDate() {
+		return endDate;
+	}
+	
+	// Setters
+	private void setPrice(double price) {
+		this.price = price;
 	}
 
 	private void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
-		return endDate;
-	}
-
 	private void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-
 }

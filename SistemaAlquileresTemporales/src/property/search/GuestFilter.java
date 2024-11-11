@@ -6,16 +6,10 @@ public class GuestFilter implements Filter {
 	private int guests;
 
 	public GuestFilter(int guests) {
-		super();
 		this.setGuests(guests);
 	}
-
-	@Override
-	public boolean matches(Property p) {
-		return p.getGuests() >= this.getGuests();
-	}
-
-	public int getGuests() {
+	
+	private int getGuests() {
 		return guests;
 	}
 
@@ -23,4 +17,10 @@ public class GuestFilter implements Filter {
 		this.guests = guests;
 	}
 
+	// ------------------------------------------------------
+	
+	@Override
+	public boolean matches(Property property) {
+		return property.getGuests() >= this.getGuests();
+	}
 }

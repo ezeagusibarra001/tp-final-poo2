@@ -6,34 +6,34 @@ public class Location {
 	private String city;
 
 	public Location(String country, String address, String city) {
-		super();
 		this.setCountry(country);
 		this.setAddress(address);
 		this.setCity(city);
 	}
-
+	
+	// Getters
 	public String getCountry() {
 		return country;
-	}
-
-	private void setCountry(String country) {
-		this.country = country;
 	}
 
 	public String getAddress() {
 		return address;
 	}
 
-	private void setAddress(String address) {
-		this.address = address;
-	}
-
 	public String getCity() {
 		return city;
+	}
+	
+	// Setters
+	private void setCountry(String country) {
+		this.country = country;
+	}
+	
+	private void setAddress(String address) {
+		this.address = address;
 	}
 
 	private void setCity(String city) {
 		this.city = city;
 	}
-
 }
