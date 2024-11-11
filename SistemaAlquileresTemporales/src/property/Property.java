@@ -44,10 +44,6 @@ public class Property{
 		this.setAvailable(true);
 	}
 
-	public String getCity() {
-		return this.getLocation().getCity();
-	}
-
 	public boolean isAvailableBetween(Date startDate, Date endDate) {
 		// Tendra que chequear las bookings del site??
 		return true;
@@ -69,16 +65,18 @@ public class Property{
 		this.getSpecialPrices().add(sp);
 	}
 	
-	// esto se compartiria con owner y tenant, donde deberia estar entonces?
-//	public double getTotalAvg(Site site) {
-//		return site.getRankingManager().calculateTotalAvg(this.getRanking());
-//	}
-//	
-//	public Map<Category, Double> getAvgPerCategory(Site site) {
-//		return site.getRankingManager().calculateAvgPerCategory(this.getRanking());
-//	}
+	public void showDetails() {
+		 System.out.println("Detalles de propiedad:");
+		 System.out.println("Tipo: " 		+ this.getPropertyType());
+		 System.out.println("Superficie: "  + this.getArea());
+		 System.out.println("Precio: " 		+ this.getPrice());
+		 System.out.println("Pais: " 		+ this.getLocation().getCountry());
+		 System.out.println("Ciudad: " 		+ this.getLocation().getCity());
+		 System.out.println("Direccion: " 	+ this.getLocation().getAddress());
+		 System.out.println("Capacidad: "   + this.getGuests());
+//		 faltan serivios, fotos, check-in check-out, metodos de pago 
+	}
 	
-
 	/* GETTERS & SETTERS */
 	public PropertyType getPropertyType() {
 		return propertyType;
