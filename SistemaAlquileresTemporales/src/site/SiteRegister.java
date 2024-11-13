@@ -36,5 +36,6 @@ public class SiteRegister {
 	
 	void registerUser(User user, LocalDate date) {
 		users.put(user, date);
+		user.setRegisterDate(date);
 	}
 }

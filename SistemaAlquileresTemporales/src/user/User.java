@@ -1,12 +1,11 @@
 package user;
 
-import ranking.Ranking;
-import stats.Stats;
-
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-
 import property.Property;
+import ranking.Ranking;
+import stats.Stats;
 
 public abstract class User {
 	// pueden cambiar a protected
@@ -16,6 +15,7 @@ public abstract class User {
 	private Ranking ranking;
 	private Stats stats;
 	private Set<Property> properties = new HashSet<Property>();
+	private LocalDate registerDate;
 	
 	public User(String fullName, String email, int phone) {
 		this.setFullName(fullName);
@@ -38,6 +38,10 @@ public abstract class User {
 		 return this.properties;
 	 }
     
+    protected LocalDate getRegisterDate() {
+    	return this.registerDate;
+    }
+    
 	// Setters
 	private void setFullName(String fullName) {
 		this.fullName = fullName;
@@ -49,6 +53,10 @@ public abstract class User {
 	
 	private void setPhone(int phone) {
 		this.phone = phone;
+	}
+	
+	public void setRegisterDate(LocalDate date) {
+		this.registerDate = date;
 	}
 	
 	// ------------------------------------------------------
