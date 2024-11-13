@@ -27,19 +27,14 @@ public class Site {
 	private CommentManager commentManager;
 	private SiteRegister siteRegister;
 
-	public Site(String name, SiteRegister siteRegister, PropertiesManager propertiesManager, RankingStrategy strategy) {
+	public Site(String name, SiteRegister siteRegister, PropertiesManager propertiesManager, RankingManager rankingManager) {
 		this.setName(name);
 		this.setSiteRegister(siteRegister);
 		this.setPropertiesManager(propertiesManager);
 		this.bookings = new ArrayList<Booking>();
-		this.rankingManager = new RankingManager(strategy);
+		this.setRankingManager(rankingManager);
 		this.commentManager = new CommentManager();
 	}
-		
-	// Getters
-//	private String getName() {
-//		return name;
-//	}
 	
 	private SiteRegister getSiteRegister() {
 		return this.siteRegister;
@@ -49,9 +44,9 @@ public class Site {
 		return propertiesManager;
 	}
 
-//	private RankingManager getRankingManager() {
-//		return rankingManager;
-//	}
+	public RankingManager getRankingManager() {
+		return rankingManager;
+	}
 	
 	private CommentManager getCommentManager() {
 		return this.commentManager;
@@ -70,12 +65,8 @@ public class Site {
 		this.propertiesManager = propertiesManager;
 	}
 
-//	private void setRankingManager(RankingManager rankingManager) {
-//		this.rankingManager = rankingManager;
-//	}
-	
-	public void setRankingStrategy(RankingStrategy strategy) {
-		this.rankingManager.setRankingStrategy(strategy);
+	private void setRankingManager(RankingManager rankingManager) {
+		this.rankingManager = rankingManager;
 	}
 	
 	// ------------------------------------------------------

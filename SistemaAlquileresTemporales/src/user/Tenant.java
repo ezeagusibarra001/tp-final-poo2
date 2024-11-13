@@ -33,10 +33,8 @@ public class Tenant extends User {
 		
 	}
 	
-
-	
 	public void makeComment(Site site, Property property, String content) {
-		if (this.getProperties().contains(property)) { // verifica que esta propiedad fue visitada
+		if (this.getProperties().contains(property)) {
 			Comment comment = new Comment(this.getFullName(), content, property);
 			site.addComment(comment);
 		}

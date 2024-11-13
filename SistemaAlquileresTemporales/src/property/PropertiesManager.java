@@ -8,34 +8,18 @@ import site.Site;
 import user.Owner;
 
 public class PropertiesManager {
-	private Site site; // ES NECESARIO TENER EL SITE ACA?
 	private List<Property> properties;
-	// private List<Filter> searchFilter; ???? o es por param no mas
-
-	// ESTE CONSTRUCTOR ESTA DE MAS?
-	public PropertiesManager(Site site) {
-		this.setSite(site);
-	}
 	
-	public PropertiesManager(Site site, List<Property> properties) {
-		this.setSite(site);
+	public PropertiesManager(List<Property> properties) {
 		this.setProperties(properties);
 	}
 	
 	// Getters
-	public Site getSite() {
-		return site;
-	}
-	
 	public List<Property> getProperties() {
 		return properties;
 	}
 	
 	// Setters
-	public void setSite(Site site) {
-		this.site = site;
-	}
-	
 	public void setProperties(List<Property> properties) {
 		this.properties = properties;
 	}
@@ -44,7 +28,7 @@ public class PropertiesManager {
 
 	public void post(Property property, Owner owner) {
 		owner.addProperty(property);
-		this.getProperties().add(property); // si se usa el primer constructor esto falla, no se inicializa properties
+		this.getProperties().add(property);
 	}
 
 	public List<Property> search(List<Filter> filters) {

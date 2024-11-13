@@ -22,7 +22,7 @@ public class Property{
 	private List<Photo> photos;
 	private Location location;
 	private List<SpecialPrice> specialPrices;
-	private Owner owner; // falta asignarse
+	private Owner owner;
 	private boolean available;
 	private Ranking ranking = new Ranking();
 	private Stats stats = new Stats();
@@ -46,114 +46,115 @@ public class Property{
 	}
 	
 	// Revisar usos y visualizacion
-	/* GETTERS & SETTERS */
+	
+	// Getters
 	public PropertyType getPropertyType() {
 		return propertyType;
-	}
-
-	public void setPropertyType(PropertyType propertyType) {
-		this.propertyType = propertyType;
 	}
 
 	public int getArea() {
 		return area;
 	}
-
-	public void setArea(int area) {
-		this.area = area;
-	}
-
+	
 	public Ranking getRanking() {
 		return this.ranking;
 	}
-
+	
 	public Date getTime_check_in() {
 		return time_check_in;
 	}
-
-	public void setTime_check_in(Date time_check_in) {
-		this.time_check_in = time_check_in;
-	}
-
+	
 	public Date getTime_check_out() {
 		return time_check_out;
 	}
-
-	public void setTime_check_out(Date time_check_out) {
-		this.time_check_out = time_check_out;
-	}
-
+	
 	public List<PaymentMethod> getPaymentMethods() {
 		return paymentMethods;
 	}
-
-	public void setPaymentMethods(List<PaymentMethod> paymentMethods) {
-		this.paymentMethods = paymentMethods;
-	}
-
+	
 	public double getPrice() {
 		return price;
 	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
+	
 	public int getGuests() {
 		return guests;
 	}
-
-	public void setGuests(int guests) {
-		this.guests = guests;
-	}
-
+	
 	public List<Service> getServices() {
 		return services;
 	}
-
-	public void setServices(List<Service> services) {
-		this.services = services;
-	}
-
+	
 	public List<Photo> getPhotos() {
 		return photos;
 	}
-
-	public void setPhotos(List<Photo> photos) {
-		this.photos = photos;
-	}
-
+	
 	public Location getLocation() {
 		return location;
 	}
-
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-
+	
 	public List<SpecialPrice> getSpecialPrices() {
 		return specialPrices;
-	}
-
-	private void setSpecialPrices(List<SpecialPrice> specialPrices) {
-		this.specialPrices = specialPrices;
 	}
 	
 	public Owner getOwner() {
 		return this.owner;
 	}
 	
+	public Stats getStats() {
+		return this.stats;
+	}
+	
 	public boolean isAvailable() {
-		// falta implementar puede reemplazar al metodo isAvailableBetween
 		return this.available;
+	}
+	
+	// Setters
+	public void setPropertyType(PropertyType propertyType) {
+		this.propertyType = propertyType;
+	}
+
+	public void setArea(int area) {
+		this.area = area;
+	}
+
+	public void setTime_check_in(Date time_check_in) {
+		this.time_check_in = time_check_in;
+	}
+
+	public void setTime_check_out(Date time_check_out) {
+		this.time_check_out = time_check_out;
+	}
+
+	public void setPaymentMethods(List<PaymentMethod> paymentMethods) {
+		this.paymentMethods = paymentMethods;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public void setGuests(int guests) {
+		this.guests = guests;
+	}
+
+	public void setServices(List<Service> services) {
+		this.services = services;
+	}
+
+	public void setPhotos(List<Photo> photos) {
+		this.photos = photos;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	private void setSpecialPrices(List<SpecialPrice> specialPrices) {
+		this.specialPrices = specialPrices;
 	}
 	
 	public void setAvailable(boolean bool) {
 		this.available = bool;
-	}
-	
-	public Stats getStats() {
-		return this.stats;
 	}
 	
 	private void setOwner(Owner owner) {

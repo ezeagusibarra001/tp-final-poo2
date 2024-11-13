@@ -8,7 +8,6 @@ import ranking.Ranking;
 import stats.Stats;
 
 public abstract class User {
-	// pueden cambiar a protected
 	protected String fullName;
 	private String email;
 	private int phone;
