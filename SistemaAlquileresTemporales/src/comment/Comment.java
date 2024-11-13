@@ -52,10 +52,9 @@ public class Comment {
 	
 	// ------------------------------------------------------
 	
-	public void showComment() {
-		System.out.println("Autor: " 	 + this.getAuthor());   
-		System.out.println("Propiedad: " + this.getProperty()); 
-		System.out.println("Fecha: "     + this.getDate());     
-		System.out.println(this.getContent());
+	public String showComment() {
+		return "Autor: "     + this.getAuthor()   + "\n" +
+			   "Propiedad: " + this.getProperty() + "\n" +
+			   "Fecha: "     + this.getDate()     + "\n" + this.getContent();
 	}
 }

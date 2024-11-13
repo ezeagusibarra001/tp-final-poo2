@@ -197,17 +197,44 @@ public class Property{
 		this.getSpecialPrices().add(specialPrice);
 	}
 	
-	public void showDetails() {
-		 System.out.println("Detalles de propiedad:");
-		 System.out.println("Tipo: " 		+ this.getPropertyType());
-		 System.out.println("Superficie: "  + this.getArea());
-		 System.out.println("Precio: " 		+ this.getPrice());
-		 System.out.println("Pais: " 		+ this.getLocation().getCountry());
-		 System.out.println("Ciudad: " 		+ this.getLocation().getCity());
-		 System.out.println("Direccion: " 	+ this.getLocation().getAddress());
-		 System.out.println("Capacidad: "   + this.getGuests());
-//		 faltan serivios, fotos, check-in check-out, metodos de pago 
-		 
-		 this.getStats().showDetails();
+	public String showDetails() {
+	    String output = "Detalles de propiedad:\n" +
+	                    "Tipo: " + getPropertyType().getDescription() + "\n" +
+	                    "Superficie: " + getArea() + " m²\n" +
+	                    "Precio: $" + getPrice() + "\n" +
+	                    "Ubicación:\n" +
+	                    "  - País: " + getLocation().getCountry() + "\n" +
+	                    "  - Ciudad: " + getLocation().getCity() + "\n" +
+	                    "  - Dirección: " + getLocation().getAddress() + "\n" +
+	                    "Capacidad: " + getGuests() + " personas\n";
+
+	    if (!getServices().isEmpty()) {
+	        output += "Servicios:\n";
+	        for (Service service : getServices()) {
+	            output += "  - " + service.getDescription() + "\n";
+	        }
+	    }
+
+	    output += "Horario:\n" +
+	              "  - Check-in: " + getTime_check_in() + "\n" +
+	              "  - Check-out: " + getTime_check_out() + "\n";
+
+	    if (!getPaymentMethods().isEmpty()) {
+	        output += "Métodos de pago:\n";
+	        for (PaymentMethod method : getPaymentMethods()) {
+	            output += "  - " + method.getDescription() + "\n";
+	        }
+	    }
+
+	    if (!getPhotos().isEmpty()) {
+	        output += "Fotos:\n";
+	        for (Photo photo : getPhotos()) {
+	            output += "  - " + photo.getUrl() + "\n";
+	        }
+	    }
+
+	    output += getStats().showDetails();
+
+	    return output;
 	}
 }

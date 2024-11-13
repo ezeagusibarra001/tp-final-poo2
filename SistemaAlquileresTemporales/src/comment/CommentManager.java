@@ -24,8 +24,16 @@ public class CommentManager {
 			      .collect(Collectors.toList());
 	}
 	
-	public void showComments(List<Comment> comments) {
-		comments.stream()
-		.forEach(comment -> comment.showComment());
+	public String showComments(List<Comment> comments) {
+		if (comments.isEmpty()) {
+	        return "No hay comentarios.";
+	    }
+		
+		String allComments = "";
+	    for (Comment comment : comments) {
+	        allComments += comment.showComment() + "\n";
+	    }
+	    
+	    return allComments;
 	}
 }

@@ -23,9 +23,11 @@ public class Owner extends User {
 				.sum();
 	}
 	
-	public void showDetails() {
-		this.getStats().showDetails();
-		System.out.println("Fecha de registro: " + this.getRegisterDate());
-		System.out.println("Cantidad total de inmuebles alquilados: " + this.getTotalRentals());
+	public String showDetails() {
+		String output = this.getStats().showDetails() + "\n";
+		output += "Fecha de registro: " + this.getRegisterDate() + "\n";
+		output += "Cantidad total de inmuebles alquilados: " + this.getTotalRentals();
+		
+		return output;
 	}
 }

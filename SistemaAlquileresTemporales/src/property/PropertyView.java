@@ -28,14 +28,18 @@ public class PropertyView {
 	
 	// ------------------------------------------------------
 	
-	public void showDetails() {
-		List<Comment> comments = this.commentManager.filterComments(this.getProperty());
-		
-		this.getProperty().showDetails();
-		this.commentManager.showComments(comments);
-		this.getProperty().getOwner().showDetails();
-		System.out.println("Cantidad de veces que alquilo el inmueble: " + 
-			this.getProperty().getOwner().getRentalCount(this.getProperty())
-		);
+	public String showDetails() {
+	    String output = "";
+
+	    output += getProperty().showDetails() + "\n";
+	    output += "Comentarios:\n";
+
+	    List<Comment> comments = commentManager.filterComments(getProperty());
+
+	    output += this.commentManager.showComments(comments) + "\n";
+	    output += getProperty().getOwner().showDetails() + "\n";
+	    output += "Cantidad de veces que alquiló el inmueble: " + getProperty().getOwner().getRentalCount(getProperty());
+
+	    return output;
 	}
 }
