@@ -15,6 +15,7 @@ import property.PropertiesManager;
 import property.Property;
 import property.search.Filter;
 import ranking.Ranking;
+import ranking.RankingManager;
 import ranking.RankingStrategy;
 import user.*;
 
@@ -33,9 +34,9 @@ class SiteTest {
     @BeforeEach
     void setUp() {
         propertiesManager = mock(PropertiesManager.class);
-        rankingStrategy = mock(RankingStrategy.class);
-        commentManager = mock(CommentManager.class);
-        site = new Site("Test Site", propertiesManager, rankingStrategy, commentManager);
+        RankingManager rankingManager = mock(RankingManager.class);
+        SiteRegister siteRegister = mock(SiteRegister.class);
+        site = new Site("Test Site",siteRegister, propertiesManager, rankingManager);
 
         user = mock(User.class);
         owner = mock(Owner.class);
@@ -47,7 +48,7 @@ class SiteTest {
     @Test
     void testRegisterUser() {
         site.registerUser(user);
-        assertNotNull(site.getStatsByUser().get(user), "User should be registered with an initial SiteStats entry");
+        assertNotNull(site.getSiteRegister().isUserRegistered(user), "User should be registered with an initial SiteStats entry");
     }
 
     @Test

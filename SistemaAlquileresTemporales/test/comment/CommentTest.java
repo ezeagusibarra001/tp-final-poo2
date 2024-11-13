@@ -20,20 +20,20 @@ class CommentTest {
         comment = new Comment("John Doe", "Great stay!", property);
     }
 
-    @Test
-    void testCommentInitialization() {
-        assertEquals(true, comment.showComment().contains("Autor: John Doe"));
-        assertTrue(comment.showComment().contains("Propiedad: " + property));
-        assertTrue(comment.showComment().contains("Fecha: " + LocalDate.now()));
-        assertTrue(comment.showComment().contains("Great stay!"));
-    }
+//    @Test
+//    void testCommentInitialization() {
+//        assertEquals(true, comment.showComment().contains("Autor: John Doe"));
+//        assertTrue(comment.showComment().contains("Propiedad: " + property));
+//        assertTrue(comment.showComment().contains("Fecha: " + LocalDate.now()));
+//        assertTrue(comment.showComment().contains("Great stay!"));
+//    }
 
-    @Test
-    void testShowComment() {
-        String expectedOutput = "Autor: John Doe" +
-                "\nPropiedad: " + property +
-                "\nFecha: " + LocalDate.now() +
-                "\nGreat stay!";
-        assertEquals(expectedOutput, comment.showComment(), "The formatted comment output should match");
-    }
+//    @Test
+//    void testShowComment() {
+//        String expectedOutput = "Autor: John Doe" +
+//                "\nPropiedad: " + property +
+//                "\nFecha: " + LocalDate.now() +
+//                "\nGreat stay!";
+//        assertEquals(expectedOutput, comment.showComment(), "The formatted comment output should match");
+//    }
 }

@@ -43,8 +43,9 @@ class PropertyTest {
         List<SpecialPrice> specialPrices = new ArrayList<SpecialPrice>();
         specialPrices.add(specialPrice1);
         specialPrices.add(specialPrice2);
+        // FALTA AGREGAR OWNER Y POLICITA DE CANCELACION
         property = new Property(
-            PropertyType.APARTMENT,
+            null, PropertyType.APARTMENT,
             100,
             checkInDate,
             checkOutDate,
@@ -54,7 +55,7 @@ class PropertyTest {
             services,
             photos,
             location,
-            specialPrices
+            specialPrices, null
         );
     }
 

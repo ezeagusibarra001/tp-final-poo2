@@ -15,13 +15,15 @@ import property.Location;
 import property.PropertiesManager;
 import property.Property;
 import property.search.*;
+import ranking.RankingManager;
 import ranking.RankingStrategy;
 import ranking.SimpleRankingStrategy;
 
 class SiteFilterTest {
     PropertiesManager propertiesManager = new PropertiesManager();
-    RankingStrategy rankingStrategy = mock(SimpleRankingStrategy.class);
-    Site airbnb = new Site("AIRBNB", propertiesManager, rankingStrategy);
+    RankingManager rankingManager = mock(RankingManager.class);
+    SiteRegister siteRegister = mock(SiteRegister.class);
+    Site airbnb = new Site("AIRBNB",siteRegister, propertiesManager, rankingManager);
 
     Date startDate;
     Date endDate;

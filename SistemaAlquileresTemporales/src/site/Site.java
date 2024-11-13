@@ -61,7 +61,7 @@ public class Site {
 		return name;
 	}
 	
-	private SiteRegister getSiteRegister() {
+	public SiteRegister getSiteRegister() {
 		return this.siteRegister;
 	}
 
@@ -152,14 +152,6 @@ public class Site {
 	    
 	public void addComment(Comment comment) {
 		this.getCommentManager().addComment(comment);
-	}
-
-	public Map<User, SiteStats> getStatsByUser() {
-		return statsByUser;
-	}
-
-	private void setStatsByUser(Map<User, SiteStats> statsByUser) {
-		this.statsByUser = statsByUser;
 	}
 
 	public List<Booking> getBookings() {

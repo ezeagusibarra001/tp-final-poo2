@@ -11,13 +11,12 @@ import property.Property;
 
 class FilterTest {
 
-    private Property property;
     private Filter mockFilter1;
     private Filter mockFilter2;
 
     @BeforeEach
     void setUp() {
-        property = mock(Property.class);
+        mock(Property.class);
         mockFilter1 = mock(Filter.class);
         mockFilter2 = mock(Filter.class);
     }
@@ -27,7 +26,7 @@ class FilterTest {
     @Test
     void testAndFilterAddFilters() {
         AndFilter andFilter = new AndFilter(new ArrayList<>());
-        andFilter.addFilters(mockFilter1);
+        andFilter.addFilter(mockFilter1);
         assertEquals(1, andFilter.getFilters().size(), "AndFilter should contain one filter after adding it");
     }
 
@@ -38,7 +37,7 @@ class FilterTest {
         filters.add(mockFilter2);
 
         AndFilter andFilter = new AndFilter(filters);
-        andFilter.removeFilters(mockFilter1);
+        andFilter.removeFilter(mockFilter1);
         
         assertEquals(1, andFilter.getFilters().size(), "AndFilter should contain one filter after removing one");
         assertFalse(andFilter.getFilters().contains(mockFilter1), "The removed filter should not be in AndFilter");
@@ -58,7 +57,7 @@ class FilterTest {
     @Test
     void testOrFilterAddFilters() {
         OrFilter orFilter = new OrFilter(new ArrayList<>());
-        orFilter.addFilters(mockFilter1);
+        orFilter.addFilter(mockFilter1);
         assertEquals(1, orFilter.getFilters().size(), "OrFilter should contain one filter after adding it");
     }
 
@@ -69,7 +68,7 @@ class FilterTest {
         filters.add(mockFilter2);
 
         OrFilter orFilter = new OrFilter(filters);
-        orFilter.removeFilters(mockFilter1);
+        orFilter.removeFilter(mockFilter1);
 
         assertEquals(1, orFilter.getFilters().size(), "OrFilter should contain one filter after removing one");
         assertFalse(orFilter.getFilters().contains(mockFilter1), "The removed filter should not be in OrFilter");
