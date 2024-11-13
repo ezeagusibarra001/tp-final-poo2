@@ -20,22 +20,20 @@ import ranking.RankingType;
 import user.*;
 
 public class Site {
-	private String name; // por que el site tiene name??
-	private List<Category> categories;
+	private String name;
 	private PropertiesManager propertiesManager;
 	private RankingManager rankingManager;
 	private List<Booking> bookings;
 	private CommentManager commentManager;
-    private Map<User, SiteStats> statsByUser;
+	private SiteRegister siteRegister;
 
-	public Site(String name, PropertiesManager propertiesManager, RankingStrategy strategy) {
-//		this.setName(name);
+	public Site(String name, SiteRegister siteRegister, PropertiesManager propertiesManager, RankingStrategy strategy) {
+		this.setName(name);
+		this.setSiteRegister(siteRegister);
 		this.setPropertiesManager(propertiesManager);
-		this.categories = new ArrayList<Category>();
 		this.bookings = new ArrayList<Booking>();
 		this.rankingManager = new RankingManager(strategy);
 		this.commentManager = new CommentManager();
-		this.statsByUser = new HashMap<>();
 	}
 		
 	// Getters
@@ -43,10 +41,10 @@ public class Site {
 //		return name;
 //	}
 	
-//	private List<Category> getCategories() {
-//		return categories;
-//	}
-//	
+	private SiteRegister getSiteRegister() {
+		return this.siteRegister;
+	}
+
 	private PropertiesManager getPropertiesManager() {
 		return propertiesManager;
 	}
@@ -60,13 +58,13 @@ public class Site {
 	}
 	
 	// Setters
-//	private void setName(String name) {
-//		this.name = name;
-//	}
-
-//	private void setCategories(List<Category> categories) {
-//		this.categories = categories;
-//	}
+	private void setName(String name) {
+		this.name = name;
+	}
+	
+	private void setSiteRegister(SiteRegister siteRegister) {
+		this.siteRegister = siteRegister;
+	}
 
 	private void setPropertiesManager(PropertiesManager propertiesManager) {
 		this.propertiesManager = propertiesManager;
@@ -84,8 +82,7 @@ public class Site {
 	
 	public void registerUser(User user) {
 		LocalDate today = LocalDate.now();
-		
-		this.statsByUser.put(user, new SiteStats(user, today));
+		this.getSiteRegister().registerUser(user, today);
 	}
 
 	public void postProperty(Property property, Owner owner) {
@@ -117,10 +114,24 @@ public class Site {
 		Property property = booking.getProperty();
 		Tenant tenant = booking.getTenant();
 		
-		this.rankingManager.calculateAvgPerCategory(owner.getRanking());
-		this.rankingManager.calculateAvgPerCategory(property.getRanking());
-		this.rankingManager.calculateAvgPerCategory(tenant.getRanking());
-		// faltan guardar los calculos en una clase view
+
+		// esto se tiene que hacer automatico(observer?)
+		Map<Category, Double> ownerAvg =this.rankingManager.calculateAvgPerCategory(owner.getRanking());
+		Map<Category, Double> propertyAvg =this.rankingManager.calculateAvgPerCategory(property.getRanking());
+		Map<Category, Double> tenantAvg =this.rankingManager.calculateAvgPerCategory(tenant.getRanking());
+		
+		double ownerTotal = this.rankingManager.calculateTotalAvg(owner.getRanking());
+		double propertyTotal = this.rankingManager.calculateTotalAvg(property.getRanking());
+		double tenantTotal = this.rankingManager.calculateTotalAvg(tenant.getRanking());
+		
+		owner.getStats().updateCategoryRating(ownerAvg);
+		owner.getStats().updateTotalAvgRating(ownerTotal);
+		
+		property.getStats().updateCategoryRating(propertyAvg);
+		property.getStats().updateTotalAvgRating(propertyTotal);
+		
+		tenant.getStats().updateCategoryRating(tenantAvg);
+		tenant.getStats().updateTotalAvgRating(tenantTotal);
 	}
 	    
 	public void addComment(Comment comment) {
