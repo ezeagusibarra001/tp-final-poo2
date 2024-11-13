@@ -19,6 +19,11 @@ public class SiteRegister {
 		this.users = new HashMap<User, LocalDate>();
 	}
 	
+	// Getters
+	private Map<User, LocalDate> getUsers() {
+		return this.users;
+	}
+	
 	// Setters
 	private void SetCategoriesTenant(Set<Category> categories) {
 		this.categoriesTenant = categories;
@@ -39,7 +44,7 @@ public class SiteRegister {
 		user.setRegisterDate(date);
 	}
 
-	public User isUserRegistered(User user) {
-		return user;
+	public boolean isRegistered(User user) {
+		return this.getUsers().containsKey(user);
 	}
 }

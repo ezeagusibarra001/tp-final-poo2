@@ -48,7 +48,7 @@ class SiteTest {
     @Test
     void testRegisterUser() {
         site.registerUser(user);
-        assertNotNull(site.getSiteRegister().isUserRegistered(user), "User should be registered with an initial SiteStats entry");
+        assertNotNull(site.getSiteRegister().isRegistered(user), "User should be registered with an initial SiteStats entry");
     }
 
     @Test
