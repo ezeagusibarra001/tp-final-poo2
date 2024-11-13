@@ -21,49 +21,57 @@ import user.*;
 
 public class Site {
 	private String name;
-	private List<Category> categories;
 	private PropertiesManager propertiesManager;
 	private RankingManager rankingManager;
 	private List<Booking> bookings;
 	private CommentManager commentManager;
-    private Map<User, SiteStats> statsByUser;
+	private SiteRegister siteRegister;
 
-	public Site(String name, PropertiesManager propertiesManager, RankingStrategy strategy) {
-		this.setName(name);
-		this.setPropertiesManager(propertiesManager);
-		this.categories = new ArrayList<Category>();
-		this.setBookings(new ArrayList<Booking>());
-		this.rankingManager = new RankingManager(strategy);
-		this.commentManager = new CommentManager();
-		this.setStatsByUser(new HashMap<>());
-	}
+	// public Site(String name, PropertiesManager propertiesManager, RankingStrategy strategy) {
+	// 	this.setName(name);
+	// 	this.setPropertiesManager(propertiesManager);
+	// 	this.categories = new ArrayList<Category>();
+	// 	this.setBookings(new ArrayList<Booking>());
+	// 	this.rankingManager = new RankingManager(strategy);
+	// 	this.commentManager = new CommentManager();
+	// 	this.setStatsByUser(new HashMap<>());
+	// }
 	
-	public Site(String name, PropertiesManager propertiesManager, RankingStrategy strategy, CommentManager commentManager) {
-        this.setName(name);
-        this.setPropertiesManager(propertiesManager);
-        this.categories = new ArrayList<Category>();
-        this.setBookings(new ArrayList<Booking>());
-        this.rankingManager = new RankingManager(strategy);
-        this.commentManager = commentManager;
-        this.setStatsByUser(new HashMap<>());
-    }
+	// public Site(String name, PropertiesManager propertiesManager, RankingStrategy strategy, CommentManager commentManager) {
+    //     this.setName(name);
+    //     this.setPropertiesManager(propertiesManager);
+    //     this.categories = new ArrayList<Category>();
+    //     this.setBookings(new ArrayList<Booking>());
+    //     this.rankingManager = new RankingManager(strategy);
+    //     this.commentManager = commentManager;
+    //     this.setStatsByUser(new HashMap<>());
+    // }
+
+	public Site(String name, SiteRegister siteRegister, PropertiesManager propertiesManager, RankingManager rankingManager) {
+		this.setName(name);
+		this.setSiteRegister(siteRegister);
+		this.setPropertiesManager(propertiesManager);
+		this.bookings = new ArrayList<Booking>();
+		this.setRankingManager(rankingManager);
+		this.commentManager = new CommentManager();
+	}
 		
 	// Getters
 	public String getName() {
 		return name;
 	}
 	
-	public List<Category> getCategories() {
-		return categories;
+	private SiteRegister getSiteRegister() {
+		return this.siteRegister;
 	}
-	
+
 	private PropertiesManager getPropertiesManager() {
 		return propertiesManager;
 	}
 
-//	private RankingManager getRankingManager() {
-//		return rankingManager;
-//	}
+	public RankingManager getRankingManager() {
+		return rankingManager;
+	}
 	
 	private CommentManager getCommentManager() {
 		return this.commentManager;
@@ -73,29 +81,24 @@ public class Site {
 	private void setName(String name) {
 		this.name = name;
 	}
-
-//	private void setCategories(List<Category> categories) {
-//		this.categories = categories;
-//	}
+	
+	private void setSiteRegister(SiteRegister siteRegister) {
+		this.siteRegister = siteRegister;
+	}
 
 	private void setPropertiesManager(PropertiesManager propertiesManager) {
 		this.propertiesManager = propertiesManager;
 	}
 
-//	private void setRankingManager(RankingManager rankingManager) {
-//		this.rankingManager = rankingManager;
-//	}
-	
-	public void setRankingStrategy(RankingStrategy strategy) {
-		this.rankingManager.setRankingStrategy(strategy);
+	private void setRankingManager(RankingManager rankingManager) {
+		this.rankingManager = rankingManager;
 	}
 	
 	// ------------------------------------------------------
 	
 	public void registerUser(User user) {
 		LocalDate today = LocalDate.now();
-		
-		this.getStatsByUser().put(user, new SiteStats(user, today));
+		this.getSiteRegister().registerUser(user, today);
 	}
 
 	public void postProperty(Property property, Owner owner) {
@@ -127,10 +130,24 @@ public class Site {
 		Property property = booking.getProperty();
 		Tenant tenant = booking.getTenant();
 		
-		this.rankingManager.calculateAvgPerCategory(owner.getRanking());
-		this.rankingManager.calculateAvgPerCategory(property.getRanking());
-		this.rankingManager.calculateAvgPerCategory(tenant.getRanking());
-		// faltan guardar los calculos en una clase view
+
+		// esto se tiene que hacer automatico(observer?)
+		Map<Category, Double> ownerAvg =this.rankingManager.calculateAvgPerCategory(owner.getRanking());
+		Map<Category, Double> propertyAvg =this.rankingManager.calculateAvgPerCategory(property.getRanking());
+		Map<Category, Double> tenantAvg =this.rankingManager.calculateAvgPerCategory(tenant.getRanking());
+		
+		double ownerTotal = this.rankingManager.calculateTotalAvg(owner.getRanking());
+		double propertyTotal = this.rankingManager.calculateTotalAvg(property.getRanking());
+		double tenantTotal = this.rankingManager.calculateTotalAvg(tenant.getRanking());
+		
+		owner.getStats().updateCategoryRating(ownerAvg);
+		owner.getStats().updateTotalAvgRating(ownerTotal);
+		
+		property.getStats().updateCategoryRating(propertyAvg);
+		property.getStats().updateTotalAvgRating(propertyTotal);
+		
+		tenant.getStats().updateCategoryRating(tenantAvg);
+		tenant.getStats().updateTotalAvgRating(tenantTotal);
 	}
 	    
 	public void addComment(Comment comment) {

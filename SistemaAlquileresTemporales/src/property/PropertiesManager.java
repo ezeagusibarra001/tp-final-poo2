@@ -33,7 +33,7 @@ public class PropertiesManager {
 	// ------------------------------------------------------
 
 	public void post(Property property, Owner owner) {
-		// o.postProperty(p);
+		owner.addProperty(property);
 		this.getProperties().add(property);
 	}
 
