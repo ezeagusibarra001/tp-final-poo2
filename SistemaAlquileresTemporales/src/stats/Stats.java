@@ -55,14 +55,15 @@ public class Stats {
     	this.setTotalAvgRating(newTotal);
     }   
     
-    public void showDetails() {
-    	System.out.println("Promedio por categoría:");
-    	
+    public String showDetails() {
+    	String output = "Promedio por categoría:\n";
+
     	for (Map.Entry<Category, Double> entry : avgRatingsPerCategory.entrySet()) {
-            System.out.println(entry.getKey().getName() + ": " + entry.getValue());
+            output += entry.getKey().getName() + ": " + entry.getValue() + "\n";
         }
-    	
-    	System.out.println("Promedio total: " + this.getTotalAvg());
-    	System.out.println("Veces que fue alquilado: " + this.getTotalRentals());
+
+        output += "Promedio total: " + this.getTotalAvg() + "\n";
+        output += "Veces que fue alquilado: " + this.getTotalRentals();
+        return output;
     }
 }
