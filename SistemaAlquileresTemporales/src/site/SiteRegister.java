@@ -38,4 +38,8 @@ public class SiteRegister {
 		users.put(user, date);
 		user.setRegisterDate(date);
 	}
+
+	public User isUserRegistered(User user) {
+		return user;
+	}
 }

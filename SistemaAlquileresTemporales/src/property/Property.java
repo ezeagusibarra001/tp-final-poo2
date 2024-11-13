@@ -41,7 +41,7 @@ public class Property{
 		this.setPaymentMethods(paymentMethods);
 		this.setGuests(guests);
 		this.setServices(services);
-		this.setPhotos(photos);
+		this.setPhotos(photos); 
 		this.setLocation(location);
 		this.setSpecialPrices(specialPrices);
 		this.setAvailable(true);

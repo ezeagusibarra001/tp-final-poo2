@@ -1,27 +1,33 @@
 package property;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import property.search.Filter;
-import site.Site;
 import user.Owner;
 
 public class PropertiesManager {
 	private List<Property> properties;
+
+	public PropertiesManager() {
+		this.setProperties(new ArrayList<Property>());
+	}
 	
 	public PropertiesManager(List<Property> properties) {
-		this.setProperties(properties);
+		this.properties = new ArrayList<>(properties);
 	}
 	
 	// Getters
+	
 	public List<Property> getProperties() {
 		return properties;
 	}
 	
 	// Setters
-	public void setProperties(List<Property> properties) {
-		this.properties = properties;
+	
+	public void setProperties(List<Property> properties) { 
+	    this.properties = new ArrayList<>(properties);
 	}
 	
 	// ------------------------------------------------------
@@ -37,7 +43,7 @@ public class PropertiesManager {
 				.collect(Collectors.toList());
 	}
 
-	private boolean passFilter(Property property, List<Filter> filters) {
+	public boolean passFilter(Property property, List<Filter> filters) {
 		return filters.stream()
 				.allMatch(filter -> filter.matches(property));
 	}

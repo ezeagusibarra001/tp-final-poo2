@@ -12,7 +12,7 @@ public class OrFilter implements Filter {
 	}
 	
 	// Getters
-	private List<Filter> getFilters() {
+	public List<Filter> getFilters() {
 		return filters;
 	}
 	

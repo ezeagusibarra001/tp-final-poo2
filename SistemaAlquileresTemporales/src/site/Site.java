@@ -27,6 +27,26 @@ public class Site {
 	private CommentManager commentManager;
 	private SiteRegister siteRegister;
 
+	// public Site(String name, PropertiesManager propertiesManager, RankingStrategy strategy) {
+	// 	this.setName(name);
+	// 	this.setPropertiesManager(propertiesManager);
+	// 	this.categories = new ArrayList<Category>();
+	// 	this.setBookings(new ArrayList<Booking>());
+	// 	this.rankingManager = new RankingManager(strategy);
+	// 	this.commentManager = new CommentManager();
+	// 	this.setStatsByUser(new HashMap<>());
+	// }
+	
+	// public Site(String name, PropertiesManager propertiesManager, RankingStrategy strategy, CommentManager commentManager) {
+    //     this.setName(name);
+    //     this.setPropertiesManager(propertiesManager);
+    //     this.categories = new ArrayList<Category>();
+    //     this.setBookings(new ArrayList<Booking>());
+    //     this.rankingManager = new RankingManager(strategy);
+    //     this.commentManager = commentManager;
+    //     this.setStatsByUser(new HashMap<>());
+    // }
+
 	public Site(String name, SiteRegister siteRegister, PropertiesManager propertiesManager, RankingManager rankingManager) {
 		this.setName(name);
 		this.setSiteRegister(siteRegister);
@@ -35,8 +55,13 @@ public class Site {
 		this.setRankingManager(rankingManager);
 		this.commentManager = new CommentManager();
 	}
+		
+	// Getters
+	public String getName() {
+		return name;
+	}
 	
-	private SiteRegister getSiteRegister() {
+	public SiteRegister getSiteRegister() {
 		return this.siteRegister;
 	}
 
@@ -88,7 +113,7 @@ public class Site {
 		if(property.isAvailable()) {
 			Booking booking = new Booking(tenant, property.getOwner(), property, checkInDate, checkOutDate);
 			booking.confirm();
-			bookings.add(booking); 
+			getBookings().add(booking); 
 		} else {
 			// podria lanzar una excepcion, un mensaje o no hacer nada
 		}
@@ -127,5 +152,13 @@ public class Site {
 	    
 	public void addComment(Comment comment) {
 		this.getCommentManager().addComment(comment);
+	}
+
+	public List<Booking> getBookings() {
+		return bookings;
+	}
+
+	private void setBookings(List<Booking> bookings) {
+		this.bookings = bookings;
 	}
 }

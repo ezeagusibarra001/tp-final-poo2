@@ -1,7 +1,7 @@
 package site;
 
 public class Category {
-	private String name;
+	protected String name;
 
 	public Category(String name) {
 		this.setName(name);
@@ -11,7 +11,7 @@ public class Category {
 		return name;
 	}
 
-	private void setName(String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 }

@@ -9,8 +9,8 @@ import stats.Stats;
 
 public abstract class User {
 	protected String fullName;
-	private String email;
-	private int phone;
+	protected String email;
+	protected int phone;
 	private Ranking ranking;
 	private Stats stats;
 	private Set<Property> properties = new HashSet<Property>();
@@ -23,7 +23,7 @@ public abstract class User {
 		this.ranking = new Ranking();
 		this.stats = new Stats();
 	}
-	
+	 
 	// Getters
     public Ranking getRanking() {
     	return this.ranking;
