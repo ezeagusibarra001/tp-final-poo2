@@ -1,6 +1,11 @@
 package user;
 
 import ranking.Ranking;
+import stats.Stats;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import property.Property;
 
 public abstract class User {
@@ -9,18 +14,30 @@ public abstract class User {
 	private String email;
 	private int phone;
 	private Ranking ranking;
+	private Stats stats;
+	private Set<Property> properties = new HashSet<Property>();
 	
 	public User(String fullName, String email, int phone) {
 		this.setFullName(fullName);
 		this.setEmail(email);
 		this.setPhone(phone);
 		this.ranking = new Ranking();
+		this.stats = new Stats();
 	}
 	
 	// Getters
     public Ranking getRanking() {
     	return this.ranking;
     }
+    
+    public Stats getStats() {
+    	return this.stats;
+    }
+	
+    protected Set<Property> getProperties() {
+		 return this.properties;
+	 }
+    
 	// Setters
 	private void setFullName(String fullName) {
 		this.fullName = fullName;
@@ -35,6 +52,10 @@ public abstract class User {
 	}
 	
 	// ------------------------------------------------------
+	
+	public void addProperty(Property property) {
+		this.properties.add(property);
+	}
 	
 	public final void rateAfterCheckout(User otherUser, Property property, Ranking rankingUser, Ranking rankingProperty) {
 		this.rateUser(otherUser, rankingUser);

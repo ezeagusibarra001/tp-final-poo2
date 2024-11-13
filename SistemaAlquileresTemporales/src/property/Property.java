@@ -8,6 +8,7 @@ import property.enums.PropertyType;
 import property.enums.Service;
 import site.*;
 import ranking.Ranking;
+import stats.Stats;
 
 public class Property{
 	private PropertyType propertyType;
@@ -24,10 +25,12 @@ public class Property{
 	private Owner owner; // falta asignarse
 	private boolean available;
 	private Ranking ranking = new Ranking();
+	private Stats stats = new Stats();
 
-	public Property(PropertyType propertyType, int area, Date time_check_in, Date time_check_out,
+	public Property(Owner owner, PropertyType propertyType, int area, Date time_check_in, Date time_check_out,
 			double price, List<PaymentMethod> paymentMethods, int guests, List<Service> services, List<Photo> photos,
 			Location location, List<SpecialPrice> specialPrices) {
+		this.setOwner(owner);
 		this.setPropertyType(propertyType);
 		this.setArea(area);
 		this.setTime_check_in(time_check_in);
@@ -148,6 +151,14 @@ public class Property{
 	public void setAvailable(boolean bool) {
 		this.available = bool;
 	}
+	
+	public Stats getStats() {
+		return this.stats;
+	}
+	
+	private void setOwner(Owner owner) {
+		this.owner = owner;
+	}
 
 	// ------------------------------------------------------
 	
@@ -184,5 +195,7 @@ public class Property{
 		 System.out.println("Direccion: " 	+ this.getLocation().getAddress());
 		 System.out.println("Capacidad: "   + this.getGuests());
 //		 faltan serivios, fotos, check-in check-out, metodos de pago 
+		 
+		 this.getStats().showDetails();
 	}
 }
