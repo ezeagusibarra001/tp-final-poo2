@@ -10,9 +10,6 @@ import ranking.Ranking;
 import site.Site;
 
 public class Tenant extends User {
-	private Set<Property> propertiesVisited = new HashSet<Property>();
-	
-	
 	public Tenant(String fullName, String email, int phone) {
 		super(fullName, email, phone);
 	}
@@ -36,12 +33,8 @@ public class Tenant extends User {
 		
 	}
 	
-	public void addProperty(Property property) {
-		this.propertiesVisited.add(property);
-	}
-	
 	public void makeComment(Site site, Property property, String content) {
-		if (this.propertiesVisited.contains(property)) { // verifica que esta propiedad fue visitada
+		if (this.getProperties().contains(property)) {
 			Comment comment = new Comment(this.getFullName(), content, property);
 			site.addComment(comment);
 		}

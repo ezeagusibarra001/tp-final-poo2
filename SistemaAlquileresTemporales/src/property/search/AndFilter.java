@@ -27,11 +27,11 @@ public class AndFilter implements Filter {
 				.allMatch(filter -> filter.matches(property));
 	}
 
-	public void addFilters(Filter filter) {
+	public void addFilter(Filter filter) {
 		this.getFilters().add(filter);
 	}
 
-	public void removeFilters(Filter filter) {
+	public void removeFilter(Filter filter) {
 		this.getFilters().remove(filter);
 	}
 }
