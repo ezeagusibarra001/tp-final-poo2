@@ -32,10 +32,10 @@ public class Site {
 		this.setName(name);
 		this.setPropertiesManager(propertiesManager);
 		this.categories = new ArrayList<Category>();
-		this.bookings = new ArrayList<Booking>();
+		this.setBookings(new ArrayList<Booking>());
 		this.rankingManager = new RankingManager(strategy);
 		this.commentManager = new CommentManager();
-		this.statsByUser = new HashMap<>();
+		this.setStatsByUser(new HashMap<>());
 	}
 		
 	// Getters
@@ -85,7 +85,7 @@ public class Site {
 	public void registerUser(User user) {
 		LocalDate today = LocalDate.now();
 		
-		this.statsByUser.put(user, new SiteStats(user, today));
+		this.getStatsByUser().put(user, new SiteStats(user, today));
 	}
 
 	public void postProperty(Property property, Owner owner) {
@@ -100,7 +100,7 @@ public class Site {
 		if(property.isAvailable()) {
 			Booking booking = new Booking(tenant, property.getOwner(), property, checkInDate, checkOutDate);
 			booking.confirm();
-			bookings.add(booking); 
+			getBookings().add(booking); 
 		} else {
 			// podria lanzar una excepcion, un mensaje o no hacer nada
 		}
@@ -125,5 +125,21 @@ public class Site {
 	    
 	public void addComment(Comment comment) {
 		this.getCommentManager().addComment(comment);
+	}
+
+	public Map<User, SiteStats> getStatsByUser() {
+		return statsByUser;
+	}
+
+	private void setStatsByUser(Map<User, SiteStats> statsByUser) {
+		this.statsByUser = statsByUser;
+	}
+
+	public List<Booking> getBookings() {
+		return bookings;
+	}
+
+	private void setBookings(List<Booking> bookings) {
+		this.bookings = bookings;
 	}
 }

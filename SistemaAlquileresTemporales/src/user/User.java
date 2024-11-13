@@ -6,8 +6,8 @@ import property.Property;
 public abstract class User {
 	// pueden cambiar a protected
 	protected String fullName;
-	private String email;
-	private int phone;
+	protected String email;
+	protected int phone;
 	private Ranking ranking;
 	
 	public User(String fullName, String email, int phone) {

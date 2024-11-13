@@ -3,160 +3,130 @@ package site;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import property.Location;
+import booking.Booking;
+import comment.Comment;
+import comment.CommentManager;
 import property.PropertiesManager;
 import property.Property;
-import property.search.*;
+import property.search.Filter;
+import ranking.Ranking;
 import ranking.RankingStrategy;
-import ranking.SimpleRankingStrategy;
+import user.*;
 
 class SiteTest {
-    PropertiesManager propertiesManager = new PropertiesManager();
-    RankingStrategy rankingStrategy = mock(SimpleRankingStrategy.class);
-    Site airbnb = new Site("AIRBNB", propertiesManager, rankingStrategy);
 
-    Date startDate;
-    Date endDate;
-    Property property1;
-    Property property2;
-    Property property3;
+    private Site site;
+    private PropertiesManager propertiesManager;
+    private RankingStrategy rankingStrategy;
+    private CommentManager commentManager;
+    private User user;
+    private Owner owner;
+    private Tenant tenant;
+    private Property property;
+    private Booking booking;
 
     @BeforeEach
     void setUp() {
-        // Define rango de fechas
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2024, Calendar.JANUARY, 1);
-        startDate = calendar.getTime();
+        propertiesManager = mock(PropertiesManager.class);
+        rankingStrategy = mock(RankingStrategy.class);
+        commentManager = mock(CommentManager.class);
+        site = new Site("Test Site", propertiesManager, rankingStrategy);
 
-        calendar.set(2024, Calendar.DECEMBER, 31);
-        endDate = calendar.getTime();
-
-        // Configura propiedades con precios, huéspedes, y ciudad
-        property1 = mock(Property.class);
-        Location location1 = mock(Location.class);
-        when(location1.getCity()).thenReturn("New York");
-        when(property1.getLocation()).thenReturn(location1);
-        when(property1.getHighestPriceBetween(startDate, endDate)).thenReturn(200.0);
-        when(property1.getLowerPriceBetween(startDate, endDate)).thenReturn(200.0);
-        when(property1.getGuests()).thenReturn(4);
-        when(property1.isAvailableBetween(startDate, endDate)).thenReturn(true);
-
-        property2 = mock(Property.class);
-        Location location2 = mock(Location.class);
-        when(location2.getCity()).thenReturn("Los Angeles");
-        when(property2.getLocation()).thenReturn(location2);
-        when(property2.getHighestPriceBetween(startDate, endDate)).thenReturn(200.0);
-        when(property2.getLowerPriceBetween(startDate, endDate)).thenReturn(200.0);
-        when(property2.getGuests()).thenReturn(4);
-        when(property2.isAvailableBetween(startDate, endDate)).thenReturn(true);
-
-        property3 = mock(Property.class);
-        Location location3 = mock(Location.class);
-        when(location3.getCity()).thenReturn("New York");
-        when(property3.getLocation()).thenReturn(location3);
-        when(property3.getHighestPriceBetween(startDate, endDate)).thenReturn(300.0);
-        when(property3.getLowerPriceBetween(startDate, endDate)).thenReturn(300.0);
-        when(property3.getGuests()).thenReturn(6);
-        when(property3.isAvailableBetween(startDate, endDate)).thenReturn(false);
-
-        propertiesManager.setProperties(Arrays.asList(property1, property2, property3));
+        user = mock(User.class);
+        owner = mock(Owner.class);
+        tenant = mock(Tenant.class);
+        property = mock(Property.class);
+        booking = mock(Booking.class);
     }
 
     @Test
-    void testPriceFilterWithDates() {
-        PriceFilter priceFilter = new PriceFilter(150.0, 250.0, startDate, endDate);
-        List<Property> filteredProperties = airbnb.searchProperties(Arrays.asList(priceFilter));
-
-        assertEquals(2, filteredProperties.size());
-        assertTrue(filteredProperties.contains(property1));
+    void testRegisterUser() {
+        site.registerUser(user);
+        assertNotNull(site.getStatsByUser().get(user), "User should be registered with an initial SiteStats entry");
     }
 
     @Test
-    void testGuestFilter() {
-        GuestFilter guestFilter = new GuestFilter(5);
-        List<Property> filteredProperties = airbnb.searchProperties(Arrays.asList(guestFilter));
-
-        assertEquals(1, filteredProperties.size());
-        assertTrue(filteredProperties.contains(property3));
+    void testPostProperty() {
+        site.postProperty(property, owner);
+        verify(propertiesManager).post(property, owner);
     }
 
     @Test
-    void testCombinedFilters() {
-        PriceFilter priceFilter = new PriceFilter(150.0, 250.0, startDate, endDate);
-        GuestFilter guestFilter = new GuestFilter(4);
-        CityFilter cityFilter = new CityFilter("New York");
-        DateFilter dateFilter = new DateFilter(startDate, endDate);
-        AndFilter combinedFilter = new AndFilter(Arrays.asList(priceFilter, guestFilter, cityFilter, dateFilter));
-
-        List<Property> filteredProperties = airbnb.searchProperties(Arrays.asList(combinedFilter));
-
-        assertEquals(1, filteredProperties.size());
-        assertTrue(filteredProperties.contains(property1));
+    void testSearchProperties() {
+        Filter filter = mock(Filter.class);
+        site.searchProperties(Arrays.asList(filter));
+        verify(propertiesManager).search(Arrays.asList(filter));
     }
 
     @Test
-    void testCityFilter() {
-        CityFilter cityFilter = new CityFilter("New York");
-        List<Property> filteredProperties = airbnb.searchProperties(Arrays.asList(cityFilter));
+    void testRequestBookingWhenPropertyIsAvailable() {
+        Date checkInDate = new Date();
+        Date checkOutDate = new Date(checkInDate.getTime() + (1000 * 60 * 60 * 24)); // One day later
 
-        assertEquals(2, filteredProperties.size());
-        assertTrue(filteredProperties.contains(property1));
-        assertTrue(filteredProperties.contains(property3));
+        when(property.isAvailable()).thenReturn(true);
+        when(property.getOwner()).thenReturn(owner);
+
+        site.requestBooking(tenant, property, checkInDate, checkOutDate);
+
+        verify(property).isAvailable();
+        assertEquals(1, site.getBookings().size(), "A new booking should be added when the property is available");
     }
 
     @Test
-    void testDateFilter() {
-        DateFilter dateFilter = new DateFilter(startDate, endDate);
-        List<Property> filteredProperties = airbnb.searchProperties(Arrays.asList(dateFilter));
+    void testRequestBookingWhenPropertyIsNotAvailable() {
+        Date checkInDate = new Date();
+        Date checkOutDate = new Date(checkInDate.getTime() + (1000 * 60 * 60 * 24)); // One day later
 
-        assertEquals(2, filteredProperties.size());
-        assertTrue(filteredProperties.contains(property1));
-        assertTrue(filteredProperties.contains(property2));
+        when(property.isAvailable()).thenReturn(false);
+
+        site.requestBooking(tenant, property, checkInDate, checkOutDate);
+
+        assertEquals(0, site.getBookings().size(), "No booking should be added when the property is not available");
     }
 
     @Test
-    void testOrFilter() {
-        PriceFilter priceFilter = new PriceFilter(150.0, 250.0, startDate, endDate);
-        GuestFilter guestFilter = new GuestFilter(10);
-        OrFilter orFilter = new OrFilter(Arrays.asList(priceFilter, guestFilter));
+    void testMakeCheckoutWithValidRankings() {
+        Ranking tenantRanking = mock(Ranking.class);
+        Ranking ownerRanking = mock(Ranking.class);
+        Ranking propertyRanking = mock(Ranking.class);
 
-        List<Property> filteredProperties = airbnb.searchProperties(Arrays.asList(orFilter));
+        when(booking.getTenant()).thenReturn(tenant);
+        when(booking.getOwner()).thenReturn(owner);
+        when(booking.getProperty()).thenReturn(property);
+        when(tenant.getRanking()).thenReturn(tenantRanking);
+        when(owner.getRanking()).thenReturn(ownerRanking);
+        when(property.getRanking()).thenReturn(propertyRanking);
 
-        assertEquals(2, filteredProperties.size());
-        assertTrue(filteredProperties.contains(property1));
-        assertTrue(filteredProperties.contains(property2));
+        List<Ranking> rankings = Arrays.asList(tenantRanking, ownerRanking, propertyRanking);
+
+        site.makeCheckout(booking, rankings);
+
+        verify(booking).makeCheckout(rankings);
+        verify(rankingStrategy).calculateAvgPerCategory(tenantRanking);
+        verify(rankingStrategy).calculateAvgPerCategory(ownerRanking);
+        verify(rankingStrategy).calculateAvgPerCategory(propertyRanking);
     }
 
     @Test
-    void testAndFilterWithDateAndCity() {
-        DateFilter dateFilter = new DateFilter(startDate, endDate);
-        CityFilter cityFilter = new CityFilter("New York");
-        AndFilter andFilter = new AndFilter(Arrays.asList(dateFilter, cityFilter));
+    void testMakeCheckoutWithInvalidRankings() {
+        Ranking tenantRanking = mock(Ranking.class);
+        Ranking ownerRanking = mock(Ranking.class);
 
-        List<Property> filteredProperties = airbnb.searchProperties(Arrays.asList(andFilter));
+        List<Ranking> rankings = Arrays.asList(tenantRanking, ownerRanking);
 
-        assertEquals(1, filteredProperties.size());
-        assertTrue(filteredProperties.contains(property1));
+        assertThrows(IllegalArgumentException.class, () -> site.makeCheckout(booking, rankings),
+                "An exception should be thrown if the number of rankings does not match RankingType values");
     }
 
     @Test
-    void testAndFilterWithPriceGuestAndCity() {
-        PriceFilter priceFilter = new PriceFilter(150.0, 250.0, startDate, endDate);
-        GuestFilter guestFilter = new GuestFilter(4);
-        CityFilter cityFilter = new CityFilter("New York");
-        AndFilter andFilter = new AndFilter(Arrays.asList(priceFilter, guestFilter, cityFilter));
-
-        List<Property> filteredProperties = airbnb.searchProperties(Arrays.asList(andFilter));
-
-        assertEquals(1, filteredProperties.size());
-        assertTrue(filteredProperties.contains(property1));
+    void testAddComment() {
+        Comment comment = mock(Comment.class);
+        site.addComment(comment);
+        verify(commentManager).addComment(comment);
     }
 }
