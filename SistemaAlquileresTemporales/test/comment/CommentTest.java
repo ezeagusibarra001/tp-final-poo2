@@ -48,19 +48,18 @@ class CommentTest {
 
     @Test
     void testShowComment() {
-        // Captura la salida en consola de showComment()
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+        // Llama a showComment() y captura el resultado
+        String output = comment.showComment();
+        
+        // Formatea la salida esperada
+        String expectedOutput = "Autor: John Doe\n" +
+                                "Propiedad: " + property + "\n" +
+                                "Fecha: " + LocalDate.now() + "\n" +
+                                "Great stay!";
 
-        comment.showComment();
+        // Compara el resultado con la salida esperada
+        assertEquals(expectedOutput, output, "La salida de showComment() debería coincidir con el formato esperado");
+    } 
 
-        String expectedOutput = "Autor: John Doe" + System.lineSeparator() +
-                                "Propiedad: " + property + System.lineSeparator() +
-                                "Fecha: " + LocalDate.now() + System.lineSeparator() +
-                                "Great stay!" + System.lineSeparator();
-        assertEquals(expectedOutput, outContent.toString(), "La salida de showComment() debería coincidir con el formato esperado");
 
-        // Restaura la salida estándar
-        System.setOut(System.out);
-    }
 }
