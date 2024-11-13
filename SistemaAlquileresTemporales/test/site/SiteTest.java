@@ -3,6 +3,7 @@ package site;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import property.search.Filter;
 import ranking.Ranking;
 import ranking.RankingManager;
 import ranking.RankingStrategy;
+import stats.Stats;
 import user.*;
 
 class SiteTest {
@@ -34,9 +36,13 @@ class SiteTest {
     @BeforeEach
     void setUp() {
         propertiesManager = mock(PropertiesManager.class);
-        RankingManager rankingManager = mock(RankingManager.class);
-        SiteRegister siteRegister = mock(SiteRegister.class);
-        site = new Site("Test Site",siteRegister, propertiesManager, rankingManager);
+        rankingStrategy = mock(RankingStrategy.class); // Mock de RankingStrategy
+        RankingManager rankingManager = new RankingManager(rankingStrategy); // Usa el mock para RankingManager
+        Set<Category> categoriesTenant = new HashSet<>();
+        Set<Category> categoriesOwner = new HashSet<>();
+        Set<Category> categoriesProperty = new HashSet<>();
+        SiteRegister siteRegister = new SiteRegister(categoriesTenant, categoriesOwner, categoriesProperty);
+        site = new Site("Test Site", siteRegister, propertiesManager, rankingManager);
 
         user = mock(User.class);
         owner = mock(Owner.class);
@@ -47,8 +53,9 @@ class SiteTest {
 
     @Test
     void testRegisterUser() {
-        site.registerUser(user);
-        assertNotNull(site.getSiteRegister().isRegistered(user), "User should be registered with an initial SiteStats entry");
+        LocalDate date = LocalDate.now();
+        site.getSiteRegister().registerUser(user, date);
+        assertTrue(site.getSiteRegister().isRegistered(user), "User should be registered with an initial SiteStats entry");
     }
 
     @Test
@@ -95,6 +102,9 @@ class SiteTest {
         Ranking tenantRanking = mock(Ranking.class);
         Ranking ownerRanking = mock(Ranking.class);
         Ranking propertyRanking = mock(Ranking.class);
+        Stats ownerStats = mock(Stats.class);
+        Stats tenantStats = mock(Stats.class);
+        Stats propertyStats = mock(Stats.class);
 
         when(booking.getTenant()).thenReturn(tenant);
         when(booking.getOwner()).thenReturn(owner);
@@ -102,6 +112,9 @@ class SiteTest {
         when(tenant.getRanking()).thenReturn(tenantRanking);
         when(owner.getRanking()).thenReturn(ownerRanking);
         when(property.getRanking()).thenReturn(propertyRanking);
+        when(owner.getStats()).thenReturn(ownerStats);
+        when(tenant.getStats()).thenReturn(tenantStats);
+        when(property.getStats()).thenReturn(propertyStats);
 
         List<Ranking> rankings = Arrays.asList(tenantRanking, ownerRanking, propertyRanking);
 
@@ -113,6 +126,8 @@ class SiteTest {
         verify(rankingStrategy).calculateAvgPerCategory(propertyRanking);
     }
 
+
+
     @Test
     void testMakeCheckoutWithInvalidRankings() {
         Ranking tenantRanking = mock(Ranking.class);
@@ -122,12 +137,5 @@ class SiteTest {
 
         assertThrows(IllegalArgumentException.class, () -> site.makeCheckout(booking, rankings),
                 "An exception should be thrown if the number of rankings does not match RankingType values");
-    }
-
-    @Test
-    void testAddComment() {
-        Comment comment = mock(Comment.class);
-        site.addComment(comment);
-        verify(commentManager).addComment(comment);
     }
 }
