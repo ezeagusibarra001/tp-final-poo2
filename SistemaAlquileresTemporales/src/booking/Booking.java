@@ -2,6 +2,8 @@ package booking;
 
 import java.util.Date;
 import java.util.List;
+
+import cancellation.CancellationPolicy;
 import user.Owner;
 import user.Tenant;
 import property.Property;
@@ -40,6 +42,24 @@ public class Booking {
 	
 	public boolean isCompleted() {
 		return this.isCompleted;
+	}
+	
+	public Date getCheckInDate() {
+		return this.checkInDate;
+	}
+	
+
+	//Falta implementar estos dos metodos
+	public double getTotalPrice() {
+		return 0;
+	}
+	
+	public double getDailyPrice() {
+		return 0;
+	}
+	
+	public CancellationPolicy getCancellationPolicy() {
+		return this.property.getCancellationPolicy();
 	}
 	
 	// Setters

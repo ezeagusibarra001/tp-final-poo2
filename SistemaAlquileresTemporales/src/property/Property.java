@@ -2,6 +2,8 @@ package property;
 
 import java.util.Date;
 import java.util.List;
+
+import cancellation.CancellationPolicy;
 import user.Owner;
 import property.enums.PaymentMethod;
 import property.enums.PropertyType;
@@ -24,10 +26,11 @@ public class Property{
 	private Owner owner; // falta asignarse
 	private boolean available;
 	private Ranking ranking = new Ranking();
+	private CancellationPolicy cancellationPolicy;
 
 	public Property(PropertyType propertyType, int area, Date time_check_in, Date time_check_out,
 			double price, List<PaymentMethod> paymentMethods, int guests, List<Service> services, List<Photo> photos,
-			Location location, List<SpecialPrice> specialPrices) {
+			Location location, List<SpecialPrice> specialPrices, CancellationPolicy cancellationPolicy) {
 		this.setPropertyType(propertyType);
 		this.setArea(area);
 		this.setTime_check_in(time_check_in);
@@ -40,6 +43,7 @@ public class Property{
 		this.setLocation(location);
 		this.setSpecialPrices(specialPrices);
 		this.setAvailable(true);
+		this.setCancellationPolicy(cancellationPolicy);
 	}
 	
 	// Revisar usos y visualizacion
@@ -148,7 +152,15 @@ public class Property{
 	public void setAvailable(boolean bool) {
 		this.available = bool;
 	}
-
+	
+	public void setCancellationPolicy(CancellationPolicy policy) {
+		this.cancellationPolicy = policy;
+	}
+	
+	public CancellationPolicy getCancellationPolicy() {
+		return this.cancellationPolicy;
+	}
+	
 	// ------------------------------------------------------
 	
 	public boolean isAvailableBetween(Date startDate, Date endDate) {
