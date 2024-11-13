@@ -15,7 +15,7 @@ public class PropertiesManager {
 	}
 	
 	public PropertiesManager(List<Property> properties) {
-		this.setProperties(properties);
+		this.properties = new ArrayList<>(properties);
 	}
 	
 	// Getters
@@ -27,7 +27,7 @@ public class PropertiesManager {
 	// Setters
 	
 	public void setProperties(List<Property> properties) { 
-		this.properties = properties;
+	    this.properties = new ArrayList<>(properties);
 	}
 	
 	// ------------------------------------------------------

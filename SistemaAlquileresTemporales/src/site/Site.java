@@ -37,6 +37,16 @@ public class Site {
 		this.commentManager = new CommentManager();
 		this.setStatsByUser(new HashMap<>());
 	}
+	
+	public Site(String name, PropertiesManager propertiesManager, RankingStrategy strategy, CommentManager commentManager) {
+        this.setName(name);
+        this.setPropertiesManager(propertiesManager);
+        this.categories = new ArrayList<Category>();
+        this.setBookings(new ArrayList<Booking>());
+        this.rankingManager = new RankingManager(strategy);
+        this.commentManager = commentManager;
+        this.setStatsByUser(new HashMap<>());
+    }
 		
 	// Getters
 	public String getName() {

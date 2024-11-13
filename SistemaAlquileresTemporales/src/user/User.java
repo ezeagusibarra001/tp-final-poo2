@@ -16,7 +16,7 @@ public abstract class User {
 		this.setPhone(phone);
 		this.ranking = new Ranking();
 	}
-	
+	 
 	// Getters
     public Ranking getRanking() {
     	return this.ranking;

@@ -76,12 +76,12 @@ public class Booking {
 	}
 	
 	private void enableRankings(List<Ranking> rankings) { 
-		Ranking tenantRanking = rankings.get(RankingType.TENANT.ordinal());
-		Ranking ownerRanking = rankings.get(RankingType.OWNER.ordinal());
-		Ranking propertyRanking = rankings.get(RankingType.PROPERTY.ordinal());
-		  
-		this.getTenant().rateAfterCheckout(owner, property, ownerRanking, propertyRanking); // Tenant rankea owner y property
-		this.getOwner().rateAfterCheckout(owner, property, tenantRanking, propertyRanking); // owner rankea tenant
+	    Ranking tenantRanking = rankings.get(RankingType.TENANT.ordinal());
+	    Ranking ownerRanking = rankings.get(RankingType.OWNER.ordinal());
+	    Ranking propertyRanking = rankings.get(RankingType.PROPERTY.ordinal());
+	      
+	    this.getTenant().rateAfterCheckout(owner, property, ownerRanking, propertyRanking); // Tenant rankea owner y property
+	    this.getOwner().rateAfterCheckout(tenant, property, tenantRanking, propertyRanking); // Owner rankea tenant y property
 	}
 	
 	public void confirm() {

@@ -31,10 +31,26 @@ class PropertiesManagerTest {
     }
 
     @Test
+    void testPropertiesManagerConstructorWithProperties() {
+        Property property1 = mock(Property.class);
+        Property property2 = mock(Property.class);
+
+        List<Property> properties = Arrays.asList(property1, property2);
+        PropertiesManager propertiesManager = new PropertiesManager(properties);
+
+        assertEquals(2, propertiesManager.getProperties().size(), "Properties manager should contain the two initialized properties");
+        assertTrue(propertiesManager.getProperties().contains(property1), "Properties manager should contain property1");
+        assertTrue(propertiesManager.getProperties().contains(property2), "Properties manager should contain property2");
+    }
+
+    @Test
     void testPostProperty() {
         Property newProperty = mock(Property.class);
+
+        // Call the method to test
         propertiesManager.post(newProperty, owner);
 
+        // Verify the new property is added to the list
         assertTrue(propertiesManager.getProperties().contains(newProperty), "Posted property should be added to the list");
     }
 
