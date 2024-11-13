@@ -32,7 +32,7 @@ class SiteTest {
     private Tenant tenant;
     private Property property;
     private Booking booking;
-
+ 
     @BeforeEach
     void setUp() {
         propertiesManager = mock(PropertiesManager.class);
@@ -118,7 +118,7 @@ class SiteTest {
 
         List<Ranking> rankings = Arrays.asList(tenantRanking, ownerRanking, propertyRanking);
 
-        site.makeCheckout(booking, rankings);
+        site.makeCheckout(booking, rankings); 
 
         verify(booking).makeCheckout(rankings);
         verify(rankingStrategy).calculateAvgPerCategory(tenantRanking);
@@ -137,5 +137,42 @@ class SiteTest {
 
         assertThrows(IllegalArgumentException.class, () -> site.makeCheckout(booking, rankings),
                 "An exception should be thrown if the number of rankings does not match RankingType values");
+    } 
+
+    @Test
+    void testGetCommentManager() {
+        CommentManager result = site.getCommentManager();
+        assertNotNull(result, "CommentManager should not be null");
     }
+
+    @Test
+    void testGetName() {
+        assertEquals("Test Site", site.getName(), "Site name should match the initialized value");
+    }
+
+    @Test
+    void testGetRankingManager() {
+        assertNotNull(site.getRankingManager(), "RankingManager should not be null");
+    }
+
+    @Test
+    void testRegisterUserIntegration() {
+        site.registerUser(user);
+        assertTrue(site.getSiteRegister().isRegistered(user), "User should be registered in the Site");
+    }
+
+    @Test
+    void testSetBookings() {
+        List<Booking> bookings = new ArrayList<>();
+        bookings.add(mock(Booking.class));
+        site.setBookings(bookings);
+
+        assertEquals(1, site.getBookings().size(), "Bookings size should match the list passed to setBookings");
+    }
+
+    @Test
+    void testGetPropertiesManager() {
+        assertEquals(propertiesManager, site.getPropertiesManager(), "PropertiesManager should match the mock initialized in setup");
+    }
+
 }

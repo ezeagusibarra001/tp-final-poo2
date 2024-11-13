@@ -6,52 +6,92 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import property.Property;
-import ranking.Ranking;
+import stats.Stats;
 
 class OwnerTest {
 
     private Owner owner;
-    private User otherUser;
     private Property property;
-    private Ranking rankingUser;
-    private Ranking rankingProperty;
-    private Ranking otherUserRanking;
+    private Stats stats;
 
     @BeforeEach
     void setUp() {
         owner = new Owner("John Doe", "john@example.com", 987654321);
-        otherUser = mock(User.class);
         property = mock(Property.class);
-        rankingUser = mock(Ranking.class);
-        rankingProperty = mock(Ranking.class);
+        stats = mock(Stats.class);
         
-        // Mock the getRanking() method for otherUser
-        otherUserRanking = mock(Ranking.class);
-        when(otherUser.getRanking()).thenReturn(otherUserRanking);
+        // Configura la propiedad mock para devolver stats
+        when(property.getStats()).thenReturn(stats);
     }
 
     @Test
-    void testOwnerInitialization() {
-        assertEquals("John Doe", owner.fullName, "Owner full name should match");
-        assertEquals("john@example.com", owner.email, "Owner email should match");
-        assertEquals(987654321, owner.phone, "Owner phone should match");
+    void testGetRentalCountForOwnedProperty() {
+        owner.addProperty(property);
+        when(stats.getTotalRentals()).thenReturn(5);
+
+        int rentalCount = owner.getRentalCount(property);
+
+        assertEquals(5, rentalCount, "El conteo de alquileres debería coincidir con el valor de stats");
     }
 
     @Test
-    void testGetRanking() {
-        assertNotNull(owner.getRanking(), "Owner should have an initial ranking");
+    void testGetRentalCountForUnownedProperty() {
+        Property otherProperty = mock(Property.class);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            owner.getRentalCount(otherProperty);
+        });
+
+        assertEquals("La propiedad no le pertenece al dueño", exception.getMessage());
     }
 
     @Test
-    void testRateAfterCheckout() {
-        // Act
-        owner.rateAfterCheckout(otherUser, property, rankingUser, rankingProperty);
+    void testGetTotalRentals() {
+        Property property1 = mock(Property.class);
+        Property property2 = mock(Property.class);
+        Stats stats1 = mock(Stats.class);
+        Stats stats2 = mock(Stats.class);
 
-        // Verify that addScores was called on otherUser's ranking with rankingUser
-        verify(otherUserRanking).addScores(rankingUser);
-        
-        // Verify that additionalRatings method on owner called addScores on rankingProperty
-        verify(rankingProperty, never()).addScores(any(Ranking.class));
+        when(property1.getStats()).thenReturn(stats1);
+        when(property2.getStats()).thenReturn(stats2);
+        when(stats1.getTotalRentals()).thenReturn(3);
+        when(stats2.getTotalRentals()).thenReturn(2);
+
+        owner.addProperty(property1);
+        owner.addProperty(property2);
+
+        int totalRentals = owner.getTotalRentals();
+
+        assertEquals(5, totalRentals, "La cantidad total de alquileres debería ser la suma de los alquileres de cada propiedad");
     }
+
+    @Test
+    void testShowDetails() {
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        // Configura el mock de stats para `showDetails` y `getTotalRentals`
+        owner.setRegisterDate(LocalDate.now());
+        when(stats.getTotalRentals()).thenReturn(5);
+        owner.addProperty(property);
+
+        owner.showDetails();
+
+        String expectedOutput = "Promedio por categoría:" + System.lineSeparator() +
+                                "Promedio total: 0.0" + System.lineSeparator() +
+                                "Veces que fue alquilado: 0" + System.lineSeparator() +
+                                "Fecha de registro: " + owner.getRegisterDate() + System.lineSeparator() +
+                                "Cantidad total de inmuebles alquilados: " + owner.getTotalRentals() + System.lineSeparator();
+
+        assertEquals(expectedOutput, outContent.toString());
+
+        System.setOut(System.out);
+    }
+
 }

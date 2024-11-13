@@ -3,7 +3,11 @@ package comment;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import property.Property;
@@ -61,5 +65,32 @@ class CommentManagerTest {
         List<Comment> filteredComments = commentManager.filterComments(newProperty);
 
         assertTrue(filteredComments.isEmpty(), "There should be no comments for a property with no comments");
+    }
+
+    @Test
+    void testShowComments() {
+        // Capture console output
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        List<Comment> commentsToShow = new ArrayList<>();
+        commentsToShow.add(comment1);
+        commentsToShow.add(comment2);
+
+        commentManager.showComments(commentsToShow);
+
+        String expectedOutput = "Autor: John Doe" + System.lineSeparator() +
+                                "Propiedad: " + property1 + System.lineSeparator() +
+                                "Fecha: " + LocalDate.now() + System.lineSeparator() +
+                                "Great stay!" + System.lineSeparator() +
+                                "Autor: Jane Smith" + System.lineSeparator() +
+                                "Propiedad: " + property1 + System.lineSeparator() +
+                                "Fecha: " + LocalDate.now() + System.lineSeparator() +
+                                "Amazing view!" + System.lineSeparator();
+
+        assertEquals(expectedOutput, outContent.toString(), "The output of showComments should match the expected format");
+
+        // Restore the original System.out
+        System.setOut(System.out);
     }
 }

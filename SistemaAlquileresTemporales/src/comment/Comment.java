@@ -17,15 +17,15 @@ public class Comment {
 	}
 	
 	// Getters
-	private String getAuthor() {
+	public String getAuthor() {
 		return this.author;
 	}
 	
-	private String getContent() {
+	public String getContent() {
 		return this.content;
 	}
 	
-	private LocalDate getDate() {
+	public LocalDate getDate() {
 		return this.date;
 	}
 	

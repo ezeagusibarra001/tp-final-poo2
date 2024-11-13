@@ -10,9 +10,9 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import cancellation.CancellationPolicy;
 import property.Property;
 import ranking.Ranking;
-import ranking.RankingType;
 import user.Owner;
 import user.Tenant;
 
@@ -27,6 +27,7 @@ class BookingTest {
     private Ranking tenantRanking;
     private Ranking ownerRanking;
     private Ranking propertyRanking;
+    private CancellationPolicy cancellationPolicy;
 
     @BeforeEach
     void setUp() {
@@ -40,6 +41,7 @@ class BookingTest {
         tenantRanking = mock(Ranking.class);
         ownerRanking = mock(Ranking.class);
         propertyRanking = mock(Ranking.class);
+        cancellationPolicy = mock(CancellationPolicy.class);
     }
 
     @Test
@@ -86,5 +88,23 @@ class BookingTest {
         // Attempting a second checkout should throw an exception
         Exception exception = assertThrows(IllegalStateException.class, () -> booking.makeCheckout(rankings));
         assertEquals("Reserva completada", exception.getMessage());
+    }
+
+    @Test
+    void testGetCancellationPolicy() {
+        when(property.getCancellationPolicy()).thenReturn(cancellationPolicy);
+        assertEquals(cancellationPolicy, booking.getCancellationPolicy(), "Cancellation policy should match");
+    }
+
+    @Test
+    void testGetTotalPrice() {
+        // Suponiendo que se implemente el método getTotalPrice en la clase Booking
+        assertEquals(0, booking.getTotalPrice(), "Total price should be zero by default");
+    }
+
+    @Test
+    void testGetDailyPrice() {
+        // Suponiendo que se implemente el método getDailyPrice en la clase Booking
+        assertEquals(0, booking.getDailyPrice(), "Daily price should be zero by default");
     }
 }

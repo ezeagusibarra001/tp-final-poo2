@@ -91,4 +91,59 @@ class PropertyTest {
 		// This would require manual checking for correct output or could use a logging
 		// system for validation
 	}
+	
+	@Test
+	void testGetCancellationPolicy() {
+	    assertNotNull(property.getCancellationPolicy(), "Cancellation policy should not be null");
+	}
+
+	@Test
+	void testGetOwner() {
+	    assertNotNull(property.getOwner(), "Owner should not be null");
+	}
+
+	@Test
+	void testGetPaymentMethods() {
+	    List<PaymentMethod> paymentMethods = property.getPaymentMethods();
+	    assertNotNull(paymentMethods, "Payment methods should not be null");
+	    assertTrue(paymentMethods.contains(PaymentMethod.CREDIT_CARD), "Payment methods should include CREDIT_CARD");
+	}
+
+	@Test
+	void testGetPhotos() {
+	    List<Photo> photos = property.getPhotos();
+	    assertNotNull(photos, "Photos should not be null");
+	    assertEquals(1, photos.size(), "There should be one photo");
+	    assertEquals("http://example.com/photo1.jpg", photos.get(0).getUrl(), "Photo URL should match");
+	}
+
+	@Test
+	void testGetRanking() {
+	    assertNotNull(property.getRanking(), "Ranking should not be null");
+	}
+
+	@Test
+	void testGetServices() {
+	    List<Service> services = property.getServices();
+	    assertNotNull(services, "Services should not be null");
+	    assertFalse(services.isEmpty(), "Services should not be empty");
+	}
+
+	@Test
+	void testGetTimeCheckIn() {
+	    assertEquals(checkInDate, property.getTime_check_in(), "Check-in date should match the expected value");
+	}
+
+	@Test
+	void testGetTimeCheckOut() {
+	    assertEquals(checkOutDate, property.getTime_check_out(), "Check-out date should match the expected value");
+	}
+
+	@Test
+	void testIsAvailableBetweenDates() {
+	    Date startDate = checkInDate;
+	    Date endDate = checkOutDate;
+	    assertTrue(property.isAvailableBetween(startDate, endDate), "Property should be available between these dates");
+	}
+
 }

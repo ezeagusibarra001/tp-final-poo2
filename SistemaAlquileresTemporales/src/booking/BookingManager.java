@@ -54,27 +54,25 @@ public class BookingManager {
 		return this.getWaitingList().getOrDefault(property, new BookingQueue(new LinkedList<>(), this));
 	}
 
-	private void setWaitingList(Map<Property, BookingQueue> waitingList) {
+	public void setWaitingList(Map<Property, BookingQueue> waitingList) {
 		this.waitingList = waitingList;
 	}
 
     // Methods
     
 	public void createBooking(Tenant tenant, Property property, Date checkInDate, Date checkOutDate) {
-        Booking booking = new Booking(tenant, property.getOwner(), property, checkInDate, checkOutDate);
-        
-        if (property.isAvailableBetween(checkInDate, checkOutDate)) {
-        	booking.confirm();
-        	addBooking(booking);
-        } else {
-        	this.addToWaitingListOf(property, booking);
-        	this.getNotificationManager().subscribe(EventType.PROPERTY_CANCELLATION, property, this.getWaitingListOf(property));     	
-        }
-        addBooking(booking);
-    
+	    Booking booking = new Booking(tenant, property.getOwner(), property, checkInDate, checkOutDate);
+	    
+	    if (property.isAvailableBetween(checkInDate, checkOutDate)) {
+	        booking.confirm();
+	        addBooking(booking); // Add booking only when the property is available
+	    } else {
+	        this.addToWaitingListOf(property, booking);
+	        this.getNotificationManager().subscribe(EventType.PROPERTY_CANCELLATION, property, this.getWaitingListOf(property));
+	    }
 	}
 	
-	private void addToWaitingListOf(Property property, Booking booking) {
+	public void addToWaitingListOf(Property property, Booking booking) {
 		this.getWaitingListOf(property).addConditionalBooking(booking);		
 	}
 

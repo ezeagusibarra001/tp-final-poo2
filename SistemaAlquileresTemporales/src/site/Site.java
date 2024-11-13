@@ -27,26 +27,6 @@ public class Site {
 	private CommentManager commentManager;
 	private SiteRegister siteRegister;
 
-	// public Site(String name, PropertiesManager propertiesManager, RankingStrategy strategy) {
-	// 	this.setName(name);
-	// 	this.setPropertiesManager(propertiesManager);
-	// 	this.categories = new ArrayList<Category>();
-	// 	this.setBookings(new ArrayList<Booking>());
-	// 	this.rankingManager = new RankingManager(strategy);
-	// 	this.commentManager = new CommentManager();
-	// 	this.setStatsByUser(new HashMap<>());
-	// }
-	
-	// public Site(String name, PropertiesManager propertiesManager, RankingStrategy strategy, CommentManager commentManager) {
-    //     this.setName(name);
-    //     this.setPropertiesManager(propertiesManager);
-    //     this.categories = new ArrayList<Category>();
-    //     this.setBookings(new ArrayList<Booking>());
-    //     this.rankingManager = new RankingManager(strategy);
-    //     this.commentManager = commentManager;
-    //     this.setStatsByUser(new HashMap<>());
-    // }
-
 	public Site(String name, SiteRegister siteRegister, PropertiesManager propertiesManager, RankingManager rankingManager) {
 		this.setName(name);
 		this.setSiteRegister(siteRegister);
@@ -65,7 +45,7 @@ public class Site {
 		return this.siteRegister;
 	}
 
-	private PropertiesManager getPropertiesManager() {
+	public PropertiesManager getPropertiesManager() {
 		return propertiesManager;
 	}
 
@@ -73,7 +53,7 @@ public class Site {
 		return rankingManager;
 	}
 	
-	private CommentManager getCommentManager() {
+	public CommentManager getCommentManager() {
 		return this.commentManager;
 	}
 	
@@ -158,7 +138,7 @@ public class Site {
 		return bookings;
 	}
 
-	private void setBookings(List<Booking> bookings) {
+	public void setBookings(List<Booking> bookings) {
 		this.bookings = bookings;
 	}
 }

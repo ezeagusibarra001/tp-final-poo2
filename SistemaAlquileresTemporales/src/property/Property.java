@@ -45,7 +45,8 @@ public class Property{
 		this.setLocation(location);
 		this.setSpecialPrices(specialPrices);
 		this.setAvailable(true);
-		this.setCancellationPolicy(cancellationPolicy);
+		this.setCancellationPolicy(cancellationPolicy); 
+		this.setOwner(owner);
 	}
 	
 	// Revisar usos y visualizacion
