@@ -7,7 +7,7 @@ import property.Property;
 public class PriceFilter implements Filter {
 	private double minPrice;
 	private double maxPrice;
-	private Date startDate; // SE USAN LOS DATE?
+	private Date startDate;
 	private Date endDate;
 
 	public PriceFilter(double minPrice, double maxPrice, Date startDate, Date endDate) {
@@ -27,14 +27,14 @@ public class PriceFilter implements Filter {
 		return maxPrice;
 	}
 	
-	// SON NECESARIO ESTOS DOS METODOS? EN QUE MOMENTO SE USAN?
-//	private Date getEndDate() {
-//		return endDate;
-//	}
-//	
-//	private Date getStartDate() {
-//		return startDate;
-//	}
+
+	private Date getEndDate() {
+		return endDate;
+	}
+	
+	private Date getStartDate() {
+		return startDate;
+	}
 	
 	// Setters
 	private void setEndDate(Date endDate) {
@@ -57,7 +57,7 @@ public class PriceFilter implements Filter {
 	
 	@Override
 	public boolean matches(Property property) {
-		return property.getHighestPriceBetween(startDate, endDate) <= this.getMaxPrice()
-				&& property.getLowerPriceBetween(startDate, endDate) >= this.getMinPrice();
+		return property.getHighestPriceBetween(this.getStartDate(), this.getEndDate()) <= this.getMaxPrice()
+				&& property.getLowerPriceBetween(this.getStartDate(), this.getEndDate()) >= this.getMinPrice();
 	}
 }

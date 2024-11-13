@@ -8,6 +8,7 @@ import property.enums.PropertyType;
 import property.enums.Service;
 import site.*;
 import ranking.Ranking;
+import stats.Stats;
 
 public class Property{
 	private PropertyType propertyType;
@@ -21,13 +22,15 @@ public class Property{
 	private List<Photo> photos;
 	private Location location;
 	private List<SpecialPrice> specialPrices;
-	private Owner owner; // falta asignarse
+	private Owner owner;
 	private boolean available;
 	private Ranking ranking = new Ranking();
+	private Stats stats = new Stats();
 
-	public Property(PropertyType propertyType, int area, Date time_check_in, Date time_check_out,
+	public Property(Owner owner, PropertyType propertyType, int area, Date time_check_in, Date time_check_out,
 			double price, List<PaymentMethod> paymentMethods, int guests, List<Service> services, List<Photo> photos,
 			Location location, List<SpecialPrice> specialPrices) {
+		this.setOwner(owner);
 		this.setPropertyType(propertyType);
 		this.setArea(area);
 		this.setTime_check_in(time_check_in);
@@ -43,110 +46,119 @@ public class Property{
 	}
 	
 	// Revisar usos y visualizacion
-	/* GETTERS & SETTERS */
+	
+	// Getters
 	public PropertyType getPropertyType() {
 		return propertyType;
-	}
-
-	public void setPropertyType(PropertyType propertyType) {
-		this.propertyType = propertyType;
 	}
 
 	public int getArea() {
 		return area;
 	}
-
-	public void setArea(int area) {
-		this.area = area;
-	}
-
+	
 	public Ranking getRanking() {
 		return this.ranking;
 	}
-
+	
 	public Date getTime_check_in() {
 		return time_check_in;
 	}
-
-	public void setTime_check_in(Date time_check_in) {
-		this.time_check_in = time_check_in;
-	}
-
+	
 	public Date getTime_check_out() {
 		return time_check_out;
 	}
-
-	public void setTime_check_out(Date time_check_out) {
-		this.time_check_out = time_check_out;
-	}
-
+	
 	public List<PaymentMethod> getPaymentMethods() {
 		return paymentMethods;
 	}
-
-	public void setPaymentMethods(List<PaymentMethod> paymentMethods) {
-		this.paymentMethods = paymentMethods;
-	}
-
+	
 	public double getPrice() {
 		return price;
 	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
+	
 	public int getGuests() {
 		return guests;
 	}
-
-	public void setGuests(int guests) {
-		this.guests = guests;
-	}
-
+	
 	public List<Service> getServices() {
 		return services;
 	}
-
-	public void setServices(List<Service> services) {
-		this.services = services;
-	}
-
+	
 	public List<Photo> getPhotos() {
 		return photos;
 	}
-
-	public void setPhotos(List<Photo> photos) {
-		this.photos = photos;
-	}
-
+	
 	public Location getLocation() {
 		return location;
 	}
-
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-
+	
 	public List<SpecialPrice> getSpecialPrices() {
 		return specialPrices;
-	}
-
-	private void setSpecialPrices(List<SpecialPrice> specialPrices) {
-		this.specialPrices = specialPrices;
 	}
 	
 	public Owner getOwner() {
 		return this.owner;
 	}
 	
+	public Stats getStats() {
+		return this.stats;
+	}
+	
 	public boolean isAvailable() {
-		// falta implementar puede reemplazar al metodo isAvailableBetween
 		return this.available;
+	}
+	
+	// Setters
+	public void setPropertyType(PropertyType propertyType) {
+		this.propertyType = propertyType;
+	}
+
+	public void setArea(int area) {
+		this.area = area;
+	}
+
+	public void setTime_check_in(Date time_check_in) {
+		this.time_check_in = time_check_in;
+	}
+
+	public void setTime_check_out(Date time_check_out) {
+		this.time_check_out = time_check_out;
+	}
+
+	public void setPaymentMethods(List<PaymentMethod> paymentMethods) {
+		this.paymentMethods = paymentMethods;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public void setGuests(int guests) {
+		this.guests = guests;
+	}
+
+	public void setServices(List<Service> services) {
+		this.services = services;
+	}
+
+	public void setPhotos(List<Photo> photos) {
+		this.photos = photos;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	private void setSpecialPrices(List<SpecialPrice> specialPrices) {
+		this.specialPrices = specialPrices;
 	}
 	
 	public void setAvailable(boolean bool) {
 		this.available = bool;
+	}
+	
+	private void setOwner(Owner owner) {
+		this.owner = owner;
 	}
 
 	// ------------------------------------------------------
@@ -184,5 +196,7 @@ public class Property{
 		 System.out.println("Direccion: " 	+ this.getLocation().getAddress());
 		 System.out.println("Capacidad: "   + this.getGuests());
 //		 faltan serivios, fotos, check-in check-out, metodos de pago 
+		 
+		 this.getStats().showDetails();
 	}
 }
