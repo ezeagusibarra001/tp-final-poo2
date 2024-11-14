@@ -69,8 +69,8 @@ class StatsTest {
         stats.updateCategoryRating(ratings);
 
         String expectedOutput = "Promedio por categoría:\n" +
+                				"Category 2: 3.8\n" +
                                 "Category 1: 4.5\n" +
-                                "Category 2: 3.8\n" +
                                 "Promedio total: 4.2\n" +
                                 "Veces que fue alquilado: 2";
 

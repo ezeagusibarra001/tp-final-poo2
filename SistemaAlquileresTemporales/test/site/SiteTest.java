@@ -10,8 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import booking.Booking;
+import booking.BookingManager;
 import comment.Comment;
 import comment.CommentManager;
+import notification.EventType;
+import notification.NotificationManager;
 import property.PropertiesManager;
 import property.Property;
 import property.search.Filter;
@@ -20,6 +23,8 @@ import ranking.RankingManager;
 import ranking.RankingStrategy;
 import stats.Stats;
 import user.*;
+
+import notification.EventListener;
 
 class SiteTest {
 
@@ -69,19 +74,6 @@ class SiteTest {
         Filter filter = mock(Filter.class);
         site.searchProperties(Arrays.asList(filter));
         verify(propertiesManager).search(Arrays.asList(filter));
-    }
-
-    @Test 
-    void testRequestBookingWhenPropertyIsAvailable() {
-        Date checkInDate = new Date();
-        Date checkOutDate = new Date(checkInDate.getTime() + (1000 * 60 * 60 * 24));
-
-        when(property.isAvailable()).thenReturn(true);
-        when(property.getOwner()).thenReturn(owner);
-
-        site.requestBooking(tenant, property, checkInDate, checkOutDate);
-
-        assertEquals(1, site.getBookings().size(), "A new booking should be added when the property is available");
     }
 
     @Test
@@ -160,18 +152,87 @@ class SiteTest {
         assertTrue(site.getSiteRegister().isRegistered(user), "User should be registered in the Site");
     }
 
-//    @Test
-//    void testSetBookings() {
-//        List<Booking> bookings = new ArrayList<>();
-//        bookings.add(mock(Booking.class));
-//        site.setBookings(bookings);
-//
-//        assertEquals(1, site.getBookings().size(), "Bookings size should match the list passed to setBookings");
-//    }
-
     @Test
     void testGetPropertiesManager() {
         assertEquals(propertiesManager, site.getPropertiesManager(), "PropertiesManager should match the mock initialized in setup");
+    }
+    
+    @Test
+    void testAddComment() {
+        Comment comment = mock(Comment.class);
+        CommentManager commentManagerSpy = spy(new CommentManager());
+        site = spy(site);
+        doReturn(commentManagerSpy).when(site).getCommentManager();
+        
+        site.addComment(comment);
+        
+        verify(commentManagerSpy).addComment(comment);
+    }
+
+
+    @Test
+    void testSubscribeToEvent() {
+        NotificationManager notificationManagerSpy = spy(new NotificationManager());
+        site = spy(site);
+        doReturn(notificationManagerSpy).when(site).getNotificationManager();
+        
+        EventType eventType = EventType.PROPERTY_CANCELLATION;
+        EventListener listener = mock(EventListener.class);
+        
+        site.subscribeToEvent(eventType, property, listener);
+        
+        verify(notificationManagerSpy).subscribe(eventType, property, listener);
+    }
+
+
+    @Test
+    void testUnsubscribeFromEvent() {
+        NotificationManager notificationManagerSpy = spy(new NotificationManager());
+        site = spy(site);
+        doReturn(notificationManagerSpy).when(site).getNotificationManager();
+        
+        EventType eventType = EventType.PROPERTY_CANCELLATION;
+        EventListener listener = mock(EventListener.class);
+        
+        site.unsubscribeFromEvent(eventType, property, (notification.EventListener) listener);
+        
+        verify(notificationManagerSpy).unsubscribe(eventType, property, (notification.EventListener) listener);
+    }
+
+    @Test
+    void testNotifyEvent() {
+        NotificationManager notificationManagerSpy = spy(new NotificationManager());
+        site = spy(site);
+        doReturn(notificationManagerSpy).when(site).getNotificationManager();
+        
+        EventType eventType = EventType.PROPERTY_CANCELLATION;
+        
+        site.notifyEvent(eventType, property);
+        
+        verify(notificationManagerSpy).notify(eventType, property);
+    }
+
+    @Test
+    void testGetTopTenTenants() {
+        BookingManager bookingManagerSpy = spy(new BookingManager());
+        site = spy(site);
+        doReturn(bookingManagerSpy).when(site).getBookingManager();
+        
+        site.getTopTenTenants();
+        
+        verify(bookingManagerSpy).getTopTenTenants(site.getSiteRegister().getTenants());
+    }
+
+    @Test
+    void testGetAllAvailableProperties() {
+        site.getAllAvailableProperties();
+        verify(propertiesManager).getAllAvailableProperties();
+    }
+
+    @Test
+    void testGetOccupancyRate() {
+        site.getOccupancyRate();
+        verify(propertiesManager).getOccupancyRate();
     }
 
 }

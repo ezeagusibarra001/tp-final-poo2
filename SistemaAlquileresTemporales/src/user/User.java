@@ -37,7 +37,7 @@ public abstract class User {
 		 return this.properties;
 	 }
     
-    protected LocalDate getRegisterDate() {
+    public LocalDate getRegisterDate() {
     	return this.registerDate;
     }
     

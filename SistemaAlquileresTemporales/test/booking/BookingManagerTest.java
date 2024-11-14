@@ -42,23 +42,23 @@ class BookingManagerTest {
     @Test
     void testCancelBooking() {
         CancellationPolicy cancellationPolicy = mock(CancellationPolicy.class);
-
+        
         when(property.getCancellationPolicy()).thenReturn(cancellationPolicy);
         when(booking.getProperty()).thenReturn(property);
         when(booking.getCheckInDate()).thenReturn(new Date());
         when(booking.getTotalPrice()).thenReturn(100.0);
         when(booking.getDailyPrice()).thenReturn(20.0);
         when(booking.getCancellationPolicy()).thenReturn(cancellationPolicy);
+        when(booking.getTenant()).thenReturn(tenant);
         when(cancellationPolicy.calculateRefund(100.0, 0, 20.0)).thenReturn(80.0);
 
         bookingManager.addBooking(booking);
         bookingManager.cancelBooking(site, booking);
 
         assertFalse(bookingManager.getBookings().contains(booking), "Booking should be removed after cancellation");
+
         verify(site).notifyEvent(any(), eq(property));
     }
-
-
 
     @Test
     void testCreateBookingWhenPropertyIsAvailable() {
@@ -99,13 +99,12 @@ class BookingManagerTest {
 
         List<Booking> result = bookingManager.getUserBookings(tenant);
 
-        assertEquals(2, result.size(), "Debería devolver solo las reservas del inquilino específico");
+        assertEquals(2, result.size(), "Should return only bookings for the specific tenant");
         assertTrue(result.contains(booking));
         assertTrue(result.contains(booking1));
         assertFalse(result.contains(booking2));
     }
 
-    
     @Test
     void testGetUserFutureBookings() {
         Date pastDate = new Date(System.currentTimeMillis() - 86400000);
@@ -124,12 +123,11 @@ class BookingManagerTest {
 
         List<Booking> result = bookingManager.getUserFutureBookings(tenant);
 
-        assertEquals(1, result.size(), "Debería devolver solo las reservas futuras");
+        assertEquals(1, result.size(), "Should return only future bookings");
         assertTrue(result.contains(futureBooking));
         assertFalse(result.contains(pastBooking));
     }
 
-    
     @Test
     void testGetUserBookingsInCity() {
         Booking bookingInCity = mock(Booking.class);
@@ -153,13 +151,11 @@ class BookingManagerTest {
 
         List<Booking> result = bookingManager.getUserBookingsInCity(tenant, "New York");
 
-        assertEquals(1, result.size(), "Debería devolver solo las reservas en la ciudad específica");
+        assertEquals(1, result.size(), "Should return only bookings in the specific city");
         assertTrue(result.contains(bookingInCity));
         assertFalse(result.contains(bookingOutOfCity));
     }
 
-
-    
     @Test
     void testGetCitiesWithUserBookings() {
         Booking bookingInNY = mock(Booking.class);
@@ -183,11 +179,8 @@ class BookingManagerTest {
 
         List<String> cities = bookingManager.getCitiesWithUserBookings(tenant);
 
-        assertEquals(2, cities.size(), "Debería devolver las ciudades con reservas del usuario");
+        assertEquals(2, cities.size(), "Should return the cities with user bookings");
         assertTrue(cities.contains("New York"));
         assertTrue(cities.contains("Los Angeles"));
     }
-
-
-
 }
