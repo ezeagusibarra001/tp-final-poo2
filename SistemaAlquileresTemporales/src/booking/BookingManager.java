@@ -46,7 +46,7 @@ public class BookingManager {
 		return waitingList;
 	} 
 	public BookingQueue getWaitingListOf(Property property) {
-		return this.getWaitingList().getOrDefault(property, new BookingQueue(new LinkedList<>(), this));
+		return this.getWaitingList().computeIfAbsent(property, k -> new BookingQueue(new LinkedList<>(), this));
 	}
 
 	public void setWaitingList(Map<Property, BookingQueue> waitingList) {
