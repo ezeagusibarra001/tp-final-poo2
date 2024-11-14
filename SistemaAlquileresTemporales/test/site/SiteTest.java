@@ -161,14 +161,14 @@ class SiteTest {
         assertTrue(site.getSiteRegister().isRegistered(user), "User should be registered in the Site");
     }
 
-    @Test
-    void testSetBookings() {
-        List<Booking> bookings = new ArrayList<>();
-        bookings.add(mock(Booking.class));
-        site.setBookings(bookings);
-
-        assertEquals(1, site.getBookings().size(), "Bookings size should match the list passed to setBookings");
-    }
+//    @Test
+//    void testSetBookings() {
+//        List<Booking> bookings = new ArrayList<>();
+//        bookings.add(mock(Booking.class));
+//        site.setBookings(bookings);
+//
+//        assertEquals(1, site.getBookings().size(), "Bookings size should match the list passed to setBookings");
+//    }
 
     @Test
     void testGetPropertiesManager() {

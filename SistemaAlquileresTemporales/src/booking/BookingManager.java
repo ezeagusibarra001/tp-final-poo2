@@ -9,11 +9,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import notification.EventType;
-import notification.NotificationManager;
 import user.Tenant;
 import user.User;
 import property.Property;
-
+import ranking.Ranking;
+import ranking.RankingType;
+import site.Site;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -22,12 +23,13 @@ public class BookingManager {
 	
 	private List<Booking> bookings;
 	private Map<Property, BookingQueue> waitingList;
-	private NotificationManager notificationManager; //Creo que no debería ser variable de instancia de esta clase
+
 	
 	// Constructor
 	public BookingManager() {
 		this.setBookings(new ArrayList<>());
 		this.setWaitingList(new HashMap<>());
+		
 	}
 	
 	// Getters and setters
@@ -39,13 +41,6 @@ public class BookingManager {
     	return this.bookings;
     }
     
-    public NotificationManager getNotificationManager() {
-		return notificationManager;
-	}
-
-	public void setNotificationManager(NotificationManager notificationManager) {
-		this.notificationManager = notificationManager;
-	}
 
 	public Map<Property, BookingQueue> getWaitingList() {
 		return waitingList;
@@ -60,15 +55,15 @@ public class BookingManager {
 
     // Methods
     
-	public void createBooking(Tenant tenant, Property property, Date checkInDate, Date checkOutDate) {
+	public void createBooking(Site site, Tenant tenant, Property property, Date checkInDate, Date checkOutDate) {
 	    Booking booking = new Booking(tenant, property.getOwner(), property, checkInDate, checkOutDate);
 	    
 	    if (property.isAvailableBetween(checkInDate, checkOutDate)) {
 	        booking.confirm();
-	        addBooking(booking); // Add booking only when the property is available
+	        this.addBooking(booking);
 	    } else {
 	        this.addToWaitingListOf(property, booking);
-	        this.getNotificationManager().subscribe(EventType.PROPERTY_CANCELLATION, property, this.getWaitingListOf(property));
+	        site.subscribeToEvent(EventType.PROPERTY_CANCELLATION, property, this.getWaitingListOf(property));
 	    }
 	}
 	
@@ -80,13 +75,25 @@ public class BookingManager {
 		this.getBookings().add(booking);
 	}
     
-    public void cancelBooking(Booking booking) {
+ // Se espera el siguiente orden: [rankingTenant, rankingOwner, rankingProperty]
+ 	public void makeCheckout(Site site, Booking booking, List<Ranking> rankings) {
+ 	    if (rankings.size() != RankingType.values().length) {
+ 	        throw new IllegalArgumentException("La cantidad de rankings no es correcta");
+ 	    } 	  
+ 	    
+ 		booking.makeCheckout(rankings);
+ 		
+ 		site.updateRankings(booking);
+ 	
+ 	}
+
+    public void cancelBooking(Site site, Booking booking) {
         int daysBeforeStart = calculateDaysBeforeStart(booking.getCheckInDate());
         double totalAmount = booking.getTotalPrice();
         double refundAmount = booking.getCancellationPolicy().calculateRefund(totalAmount, daysBeforeStart, booking.getDailyPrice());
         
         this.getBookings().remove(booking);
-        this.getNotificationManager().notify(EventType.PROPERTY_CANCELLATION, booking.getProperty());
+        site.notifyEvent(EventType.PROPERTY_CANCELLATION, booking.getProperty());
         
         this.sendCancellationNotification(booking, refundAmount);
     }
@@ -99,11 +106,10 @@ public class BookingManager {
 	}
 	
 	
-	// Falta definir cómo recibe el email el inquilino	
 	private void sendCancellationNotification(Booking booking, double refundAmount) {
 		
 		String email = createEmail(booking, refundAmount);
-		//booking.getTenant().receiveEmail(email); 
+		booking.getTenant().receiveEmail(email); 
 		
 	}
    
@@ -115,6 +121,10 @@ public class BookingManager {
 		return getBookings().stream()
 				.filter(b -> b.getTenant().equals(tenant))
 				.collect(Collectors.toList());
+	}
+	
+	public Integer getUserBookingCount(User tenant) {
+		return this.getUserBookings(tenant).size();
 	}
 
 	public List<Booking> getUserFutureBookings(User tenant) {
@@ -140,6 +150,13 @@ public class BookingManager {
 		            .distinct()
 		            .collect(Collectors.toList());
 		}
+
+	public List<User> getTopTenTenants(List<User> tenants) {
+		return tenants.stream()
+                .sorted((tenant1, tenant2) -> Integer.compare(this.getUserBookingCount(tenant2), this.getUserBookingCount(tenant1))) 
+                .limit(10) 
+                .collect(Collectors.toList());
+	}
 
 
 }

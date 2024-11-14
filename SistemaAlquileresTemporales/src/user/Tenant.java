@@ -1,9 +1,9 @@
 package user;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
+
+import booking.Booking;
 import comment.Comment;
 import property.Property;
 import ranking.Ranking;
@@ -33,11 +33,19 @@ public class Tenant extends User {
 		
 	}
 	
+	public void cancelBooking(Site site, Booking booking) {
+		site.cancelBooking(booking);
+	}
+	
 	public void makeComment(Site site, Property property, String content) {
 		if (this.getProperties().contains(property)) {
 			Comment comment = new Comment(this.getFullName(), content, property);
 			site.addComment(comment);
 		}
+	}
+
+	public void receiveEmail(String email) {
+		
 	}
 	
 	// metodos makeComment y requestBooking deberian estar en otra clase intermedia para cumplir con principio SOLID de unicidad?

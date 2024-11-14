@@ -47,4 +47,23 @@ public class PropertiesManager {
 		return filters.stream()
 				.allMatch(filter -> filter.matches(property));
 	}
+
+	public List<Property> getAllAvailableProperties() {
+		return this.getProperties().stream()
+					.filter(p -> p.isAvailable())
+					.collect(Collectors.toList());
+	}
+
+	public double getOccupancyRate() {
+		
+		return (double) this.getOccupiedProperties().size() / this.getProperties().size() ;
+	}
+
+	private List<Property> getOccupiedProperties() {
+		return this.getProperties().stream()
+				.filter(p -> !p.isAvailable())
+				.collect(Collectors.toList());
+	}
+	
+ 
 }
