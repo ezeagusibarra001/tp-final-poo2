@@ -1,44 +1,47 @@
 package site;
 
 import java.util.List;
+import java.util.Set;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
-import java.util.HashMap;
+
 
 import ranking.Ranking;
 import booking.Booking;
+import booking.BookingManager;
 import comment.Comment;
 import comment.CommentManager;
+import notification.EventListener;
+import notification.EventType;
+import notification.NotificationManager;
 import property.PropertiesManager;
 import property.Property;
 import property.search.Filter;
 import ranking.RankingManager;
-import ranking.RankingStrategy;
-import ranking.RankingType;
 import user.*;
 
 public class Site {
 	private String name;
 	private PropertiesManager propertiesManager;
 	private RankingManager rankingManager;
-	private List<Booking> bookings;
 	private CommentManager commentManager;
 	private SiteRegister siteRegister;
+	private BookingManager bookingManager;
+	private NotificationManager notificationManager;
 
 	public Site(String name, SiteRegister siteRegister, PropertiesManager propertiesManager, RankingManager rankingManager) {
 		this.setName(name);
 		this.setSiteRegister(siteRegister);
 		this.setPropertiesManager(propertiesManager);
-		this.bookings = new ArrayList<Booking>();
 		this.setRankingManager(rankingManager);
 		this.commentManager = new CommentManager();
+		this.bookingManager = new BookingManager();
+		this.notificationManager = new NotificationManager();
 	}
 		
 	// Getters
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	public SiteRegister getSiteRegister() {
@@ -46,15 +49,27 @@ public class Site {
 	}
 
 	public PropertiesManager getPropertiesManager() {
-		return propertiesManager;
+		return this.propertiesManager;
 	}
 
 	public RankingManager getRankingManager() {
-		return rankingManager;
+		return this.rankingManager;
 	}
 	
 	public CommentManager getCommentManager() {
 		return this.commentManager;
+	}
+	
+	public BookingManager getBookingManager() {
+		return this.bookingManager;
+	}
+	
+	public NotificationManager getNotificationManager() {
+		return this.notificationManager;
+	}
+	
+	public List<Booking> getBookings() {
+		return this.getBookingManager().getBookings();
 	}
 	
 	// Setters
@@ -89,56 +104,64 @@ public class Site {
 		return this.getPropertiesManager().search(filters);
 	}
 
+	//Si la propiedad está disponible se confirma la reserva, sino queda como reserva condicional
 	public void requestBooking(Tenant tenant, Property property, Date checkInDate, Date checkOutDate) {
-		if(property.isAvailable()) {
-			Booking booking = new Booking(tenant, property.getOwner(), property, checkInDate, checkOutDate);
-			booking.confirm();
-			getBookings().add(booking); 
-		} else {
-			// podria lanzar una excepcion, un mensaje o no hacer nada
-		}
+		this.getBookingManager().createBooking(this, tenant, property, checkInDate, checkOutDate);
 	}
 	
 	// Se espera el siguiente orden: [rankingTenant, rankingOwner, rankingProperty]
 	public void makeCheckout(Booking booking, List<Ranking> rankings) {
-	    if (rankings.size() != RankingType.values().length) {
-	        throw new IllegalArgumentException("La cantidad de rankings no es correcta");
-	    }
-		booking.makeCheckout(rankings);
-		
-		Owner owner = booking.getOwner();
-		Property property = booking.getProperty();
-		Tenant tenant = booking.getTenant();
-		
-
-		// esto se tiene que hacer automatico(observer?)
-		Map<Category, Double> ownerAvg =this.rankingManager.calculateAvgPerCategory(owner.getRanking());
-		Map<Category, Double> propertyAvg =this.rankingManager.calculateAvgPerCategory(property.getRanking());
-		Map<Category, Double> tenantAvg =this.rankingManager.calculateAvgPerCategory(tenant.getRanking());
-		
-		double ownerTotal = this.rankingManager.calculateTotalAvg(owner.getRanking());
-		double propertyTotal = this.rankingManager.calculateTotalAvg(property.getRanking());
-		double tenantTotal = this.rankingManager.calculateTotalAvg(tenant.getRanking());
-		
-		owner.getStats().updateCategoryRating(ownerAvg);
-		owner.getStats().updateTotalAvgRating(ownerTotal);
-		
-		property.getStats().updateCategoryRating(propertyAvg);
-		property.getStats().updateTotalAvgRating(propertyTotal);
-		
-		tenant.getStats().updateCategoryRating(tenantAvg);
-		tenant.getStats().updateTotalAvgRating(tenantTotal);
+		this.getBookingManager().makeCheckout(this,booking, rankings);
 	}
-	    
+	
+	public void cancelBooking(Booking booking) {
+		this.getBookingManager().cancelBooking(this, booking);
+		
+	}
+	
 	public void addComment(Comment comment) {
 		this.getCommentManager().addComment(comment);
 	}
 
-	public List<Booking> getBookings() {
-		return bookings;
-	}
+	
+	// Notificaciones
+	
+	public void subscribeToEvent(EventType eventType, Property property, EventListener listener) {
+        this.getNotificationManager().subscribe(eventType, property, listener);
+    }
 
-	public void setBookings(List<Booking> bookings) {
-		this.bookings = bookings;
+    public void unsubscribeFromEvent(EventType eventType, Property property, EventListener listener) {
+    	this.getNotificationManager().unsubscribe(eventType, property, listener);
+    }
+
+    
+    public void notifyEvent(EventType eventType, Property property) {
+    	this.getNotificationManager().notify(eventType, property);
+    }
+    
+    // Rankings
+
+	public void updateRankings(Booking booking) {
+		this.getRankingManager().updateRankings(booking);
+		
 	}
+	
+	// Estadisticas
+	
+    public List<User> getTopTenTenants() {
+        List<User> tenants = this.getSiteRegister().getTenants();
+        return this.getBookingManager().getTopTenTenants(tenants); 
+    }
+
+    public List<Property> getAllAvailableProperties() {
+        return this.getPropertiesManager().getAllAvailableProperties();
+    }
+
+    public double getOccupancyRate() {
+       return this.getPropertiesManager().getOccupancyRate();
+    }
+
+	
+
+
 }

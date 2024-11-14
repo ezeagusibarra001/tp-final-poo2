@@ -12,12 +12,13 @@ import cancellation.CancellationPolicy;
 import notification.NotificationManager;
 import property.Location;
 import property.Property;
+import site.Site;
 import user.Tenant;
 
 class BookingManagerTest {
 
     private BookingManager bookingManager;
-    private NotificationManager notificationManager;
+    private Site site;
     private Tenant tenant;
     private Property property;
     private Booking booking;
@@ -25,8 +26,7 @@ class BookingManagerTest {
     @BeforeEach
     void setUp() {
         bookingManager = new BookingManager();
-        notificationManager = mock(NotificationManager.class);
-        bookingManager.setNotificationManager(notificationManager);
+        site = mock(Site.class);
 
         tenant = mock(Tenant.class);
         property = mock(Property.class);
@@ -52,10 +52,10 @@ class BookingManagerTest {
         when(cancellationPolicy.calculateRefund(100.0, 0, 20.0)).thenReturn(80.0);
 
         bookingManager.addBooking(booking);
-        bookingManager.cancelBooking(booking);
+        bookingManager.cancelBooking(site, booking);
 
         assertFalse(bookingManager.getBookings().contains(booking), "Booking should be removed after cancellation");
-        verify(notificationManager).notify(any(), eq(property));
+        verify(site).notifyEvent(any(), eq(property));
     }
 
 
@@ -66,7 +66,7 @@ class BookingManagerTest {
         Date checkIn = new Date();
         Date checkOut = new Date(checkIn.getTime() + 86400000);
 
-        bookingManager.createBooking(tenant, property, checkIn, checkOut);
+        bookingManager.createBooking(site, tenant, property, checkIn, checkOut);
 
         assertEquals(1, bookingManager.getBookings().size(), "Booking should be created and confirmed when property is available");
     }
