@@ -39,6 +39,4 @@ public class Tenant extends User {
 			site.addComment(comment);
 		}
 	}
-	
-	// metodos makeComment y requestBooking deberian estar en otra clase intermedia para cumplir con principio SOLID de unicidad?
 }
