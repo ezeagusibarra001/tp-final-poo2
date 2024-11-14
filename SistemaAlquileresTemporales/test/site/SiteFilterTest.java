@@ -33,7 +33,6 @@ class SiteFilterTest {
 
     @BeforeEach
     void setUp() {
-        // Define rango de fechas
         Calendar calendar = Calendar.getInstance();
         calendar.set(2024, Calendar.JANUARY, 1);
         startDate = calendar.getTime();
@@ -41,7 +40,6 @@ class SiteFilterTest {
         calendar.set(2024, Calendar.DECEMBER, 31);
         endDate = calendar.getTime();
 
-        // Configura propiedades con precios, huéspedes, y ciudad
         property1 = mock(Property.class);
         Location location1 = mock(Location.class);
         when(location1.getCity()).thenReturn("New York");

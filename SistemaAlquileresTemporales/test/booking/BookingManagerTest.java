@@ -41,16 +41,14 @@ class BookingManagerTest {
 
     @Test
     void testCancelBooking() {
-        // Crear y configurar el mock de CancellationPolicy
         CancellationPolicy cancellationPolicy = mock(CancellationPolicy.class);
 
-        // Configurar mocks para las propiedades de booking
         when(property.getCancellationPolicy()).thenReturn(cancellationPolicy);
         when(booking.getProperty()).thenReturn(property);
         when(booking.getCheckInDate()).thenReturn(new Date());
         when(booking.getTotalPrice()).thenReturn(100.0);
         when(booking.getDailyPrice()).thenReturn(20.0);
-        when(booking.getCancellationPolicy()).thenReturn(cancellationPolicy); // Configurar booking para devolver el cancellationPolicy
+        when(booking.getCancellationPolicy()).thenReturn(cancellationPolicy);
         when(cancellationPolicy.calculateRefund(100.0, 0, 20.0)).thenReturn(80.0);
 
         bookingManager.addBooking(booking);
@@ -110,8 +108,8 @@ class BookingManagerTest {
     
     @Test
     void testGetUserFutureBookings() {
-        Date pastDate = new Date(System.currentTimeMillis() - 86400000); // Un día en el pasado
-        Date futureDate = new Date(System.currentTimeMillis() + 86400000); // Un día en el futuro
+        Date pastDate = new Date(System.currentTimeMillis() - 86400000);
+        Date futureDate = new Date(System.currentTimeMillis() + 86400000);
 
         Booking pastBooking = mock(Booking.class);
         Booking futureBooking = mock(Booking.class);
@@ -141,7 +139,6 @@ class BookingManagerTest {
         Location locationInCity = mock(Location.class);
         Location locationOutOfCity = mock(Location.class);
 
-        // Configurar los mocks para que devuelvan propiedades y ubicaciones específicas
         when(bookingInCity.getTenant()).thenReturn(tenant);
         when(bookingOutOfCity.getTenant()).thenReturn(tenant);
         when(bookingInCity.getProperty()).thenReturn(propertyInCity);
@@ -172,7 +169,6 @@ class BookingManagerTest {
         Location locationNY = mock(Location.class);
         Location locationLA = mock(Location.class);
 
-        // Configuramos los mocks para devolver propiedades y ubicaciones específicas
         when(bookingInNY.getTenant()).thenReturn(tenant);
         when(bookingInLA.getTenant()).thenReturn(tenant);
         when(bookingInNY.getProperty()).thenReturn(propertyNY);

@@ -32,7 +32,6 @@ class TenantTest {
         rankingProperty = mock(Ranking.class);
         site = mock(Site.class);
 
-        // Mock the getRanking() method for otherUser and property
         when(otherUser.getRanking()).thenReturn(mock(Ranking.class));
         propertyRanking = mock(Ranking.class);
         when(property.getRanking()).thenReturn(propertyRanking);
@@ -54,10 +53,8 @@ class TenantTest {
     void testRateAfterCheckout() {
         tenant.rateAfterCheckout(otherUser, property, rankingUser, rankingProperty);
 
-        // Verify that addScores was called on otherUser's ranking with rankingUser
         verify(otherUser.getRanking()).addScores(rankingUser);
         
-        // Verify that addScores was called on property’s ranking with rankingProperty
         verify(property.getRanking()).addScores(rankingProperty);
     }
 
@@ -70,12 +67,10 @@ class TenantTest {
     @Test
     void testRequestBooking() {
         Date checkInDate = new Date();
-        Date checkOutDate = new Date(checkInDate.getTime() + (1000 * 60 * 60 * 24)); // One day later
+        Date checkOutDate = new Date(checkInDate.getTime() + (1000 * 60 * 60 * 24));
 
         tenant.requestBooking(site, property, checkInDate, checkOutDate);
         verify(site).requestBooking(tenant, property, checkInDate, checkOutDate);
-        // Optionally, if you want to confirm the property was added to propertiesVisited, uncomment the following line
-        // assertTrue(tenant.getPropertiesVisited().contains(property), "Property should be added to propertiesVisited after booking");
     }
 
     @Test

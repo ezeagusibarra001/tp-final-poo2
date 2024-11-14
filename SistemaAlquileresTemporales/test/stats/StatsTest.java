@@ -56,18 +56,25 @@ class StatsTest {
         stats.updateTotalAvgRating(3.6);
         assertEquals(3.6, stats.getTotalAvg(), "Total average rating should be updated to 3.6");
     }
-
+    
     @Test
     void testShowDetails() {
+        stats.updateTotalAvgRating(4.2);
+        stats.incrementRentalCount();
+        stats.incrementRentalCount();
+        
         Map<Category, Double> ratings = new HashMap<>();
         ratings.put(category1, 4.5);
         ratings.put(category2, 3.8);
         stats.updateCategoryRating(ratings);
-        stats.updateTotalAvgRating(4.1);
-        stats.incrementRentalCount();
 
-        // Since showDetails() only prints to the console, we can invoke it to ensure it runs without errors
-        // but we can't assert anything in this case without capturing the console output.
-        stats.showDetails(); // We assume this works as it's a simple console output.
+        String expectedOutput = "Promedio por categoría:\n" +
+                                "Category 1: 4.5\n" +
+                                "Category 2: 3.8\n" +
+                                "Promedio total: 4.2\n" +
+                                "Veces que fue alquilado: 2";
+
+        assertEquals(expectedOutput, stats.showDetails(), "La salida de showDetails debería coincidir con el formato esperado");
     }
+
 }

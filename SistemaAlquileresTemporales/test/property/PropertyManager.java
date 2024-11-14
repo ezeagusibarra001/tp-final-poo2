@@ -21,10 +21,8 @@ class PropertiesManagerTest {
     void setUp() {
         owner = mock(Owner.class);
 
-        // Initialize PropertiesManager with mock properties
         propertiesManager = new PropertiesManager();
 
-        // Create mock properties with different configurations
         property1 = mock(Property.class);
         property2 = mock(Property.class);
         propertiesManager.setProperties(Arrays.asList(property1, property2));
@@ -47,10 +45,8 @@ class PropertiesManagerTest {
     void testPostProperty() {
         Property newProperty = mock(Property.class);
 
-        // Call the method to test
         propertiesManager.post(newProperty, owner);
 
-        // Verify the new property is added to the list
         assertTrue(propertiesManager.getProperties().contains(newProperty), "Posted property should be added to the list");
     }
 
