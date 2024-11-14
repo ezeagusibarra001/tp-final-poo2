@@ -3,8 +3,6 @@ package property;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,39 +16,37 @@ import user.Owner;
 class PropertyViewTest {
 
     private PropertyView propertyView;
-    private Property property;
-    private CommentManager commentManager;
-    private Owner owner;
+    private Property propertyMock;
+    private CommentManager commentManagerMock;
+    private Owner ownerMock;
 
     @BeforeEach
     void setUp() {
-        property = mock(Property.class);
-        commentManager = mock(CommentManager.class);
-        owner = mock(Owner.class);
+        propertyMock = mock(Property.class);
+        commentManagerMock = mock(CommentManager.class);
+        ownerMock = mock(Owner.class);
 
-        when(property.getOwner()).thenReturn(owner);
+        when(propertyMock.getOwner()).thenReturn(ownerMock);
 
-        propertyView = new PropertyView(property, commentManager);
+        propertyView = new PropertyView(propertyMock, commentManagerMock);
     }
 
     @Test
     void testShowDetails() {
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+        when(propertyMock.showDetails()).thenReturn("Detalles de propiedad:\nTipo: Departamento\n...");
+        when(ownerMock.showDetails()).thenReturn("Detalles del propietario: John Doe");
+        when(ownerMock.getRentalCount(propertyMock)).thenReturn(5);
 
         List<Comment> comments = Arrays.asList(mock(Comment.class));
-        when(commentManager.filterComments(property)).thenReturn(comments);
-        when(owner.getRentalCount(property)).thenReturn(3);
+        when(commentManagerMock.filterComments(propertyMock)).thenReturn(comments);
+        when(commentManagerMock.showComments(comments)).thenReturn("Comentario: ¡Excelente lugar!");
 
-        propertyView.showDetails();
+        String expectedOutput = "Detalles de propiedad:\nTipo: Departamento\n...\n" +
+                                "Comentarios:\n" +
+                                "Comentario: ¡Excelente lugar!\n" +
+                                "Detalles del propietario: John Doe\n" +
+                                "Cantidad de veces que alquiló el inmueble: 5";
 
-        verify(property).showDetails();
-        verify(commentManager).showComments(comments);
-        verify(owner).showDetails();
-
-        String expectedOutput = "Cantidad de veces que alquilo el inmueble: 3" + System.lineSeparator();
-        assertTrue(outContent.toString().contains(expectedOutput), "The rental count details should be correctly formatted and printed");
-
-        System.setOut(System.out); // Restore original System.out
+        assertEquals(expectedOutput, propertyView.showDetails(), "La salida de showDetails debe coincidir con el formato esperado");
     }
 }

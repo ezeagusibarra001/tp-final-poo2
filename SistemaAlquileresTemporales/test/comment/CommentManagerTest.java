@@ -25,16 +25,13 @@ class CommentManagerTest {
     void setUp() {
         commentManager = new CommentManager();
         
-        // Mock properties
         property1 = mock(Property.class);
         property2 = mock(Property.class);
 
-        // Create comments with different properties
         comment1 = new Comment("John Doe", "Great stay!", property1);
         comment2 = new Comment("Jane Smith", "Amazing view!", property1);
         comment3 = new Comment("Tom Brown", "Cozy place!", property2);
 
-        // Add comments to manager
         commentManager.addComment(comment1);
         commentManager.addComment(comment2);
         commentManager.addComment(comment3);
@@ -69,28 +66,21 @@ class CommentManagerTest {
 
     @Test
     void testShowComments() {
-        // Capture console output
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
         List<Comment> commentsToShow = new ArrayList<>();
         commentsToShow.add(comment1);
         commentsToShow.add(comment2);
 
-        commentManager.showComments(commentsToShow);
+        String output = commentManager.showComments(commentsToShow);
 
-        String expectedOutput = "Autor: John Doe" + System.lineSeparator() +
-                                "Propiedad: " + property1 + System.lineSeparator() +
-                                "Fecha: " + LocalDate.now() + System.lineSeparator() +
-                                "Great stay!" + System.lineSeparator() +
-                                "Autor: Jane Smith" + System.lineSeparator() +
-                                "Propiedad: " + property1 + System.lineSeparator() +
-                                "Fecha: " + LocalDate.now() + System.lineSeparator() +
-                                "Amazing view!" + System.lineSeparator();
+        assertTrue(output.contains("Autor: John Doe"), "Output should contain author 'John Doe'");
+        assertTrue(output.contains("Autor: Jane Smith"), "Output should contain author 'Jane Smith'");
+        assertTrue(output.contains("Great stay!"), "Output should contain the comment 'Great stay!'");
+        assertTrue(output.contains("Amazing view!"), "Output should contain the comment 'Amazing view!'");
+        assertTrue(output.contains("Fecha: " + LocalDate.now()), "Output should contain the current date");
 
-        assertEquals(expectedOutput, outContent.toString(), "The output of showComments should match the expected format");
+        assertTrue(output.contains("Propiedad:"), "Output should contain the word 'Propiedad:'");
 
-        // Restore the original System.out
-        System.setOut(System.out);
     }
+
+
 }

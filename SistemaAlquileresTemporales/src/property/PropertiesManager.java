@@ -19,13 +19,11 @@ public class PropertiesManager {
 	}
 	
 	// Getters
-	
 	public List<Property> getProperties() {
 		return properties;
 	}
 	
 	// Setters
-	
 	public void setProperties(List<Property> properties) { 
 	    this.properties = new ArrayList<>(properties);
 	}

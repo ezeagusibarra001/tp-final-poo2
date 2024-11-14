@@ -47,6 +47,4 @@ public class Tenant extends User {
 	public void receiveEmail(String email) {
 		
 	}
-	
-	// metodos makeComment y requestBooking deberian estar en otra clase intermedia para cumplir con principio SOLID de unicidad?
 }

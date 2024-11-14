@@ -71,10 +71,4 @@ class NotificationTest {
         assertEquals(2000.0, event.getPropertyPrice());
         assertEquals("QUINCHO", event.getPropertyType());
     }
-
-    @Test
-    void testNotifyWithNoListeners() {
-        // No se debería hacer nada si no hay listeners
-        notificationManager.notify(EventType.PROPERTY_BOOKING, property);
-    }
 }

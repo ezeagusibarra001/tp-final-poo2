@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class SpecialPrice {
 	private double price;
-	private Date startDate; // conviene cambiar por LocalDate?
+	private Date startDate;
 	private Date endDate;
 
 	public SpecialPrice(double price, Date startDate, Date endDate) {

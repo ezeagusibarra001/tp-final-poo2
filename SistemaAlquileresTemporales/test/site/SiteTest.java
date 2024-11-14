@@ -36,8 +36,8 @@ class SiteTest {
     @BeforeEach
     void setUp() {
         propertiesManager = mock(PropertiesManager.class);
-        rankingStrategy = mock(RankingStrategy.class); // Mock de RankingStrategy
-        RankingManager rankingManager = new RankingManager(rankingStrategy); // Usa el mock para RankingManager
+        rankingStrategy = mock(RankingStrategy.class);
+        RankingManager rankingManager = new RankingManager(rankingStrategy);
         Set<Category> categoriesTenant = new HashSet<>();
         Set<Category> categoriesOwner = new HashSet<>();
         Set<Category> categoriesProperty = new HashSet<>();
@@ -74,21 +74,20 @@ class SiteTest {
     @Test 
     void testRequestBookingWhenPropertyIsAvailable() {
         Date checkInDate = new Date();
-        Date checkOutDate = new Date(checkInDate.getTime() + (1000 * 60 * 60 * 24)); // One day later
+        Date checkOutDate = new Date(checkInDate.getTime() + (1000 * 60 * 60 * 24));
 
         when(property.isAvailable()).thenReturn(true);
         when(property.getOwner()).thenReturn(owner);
 
         site.requestBooking(tenant, property, checkInDate, checkOutDate);
 
-        // Instead of verifying that isAvailable is called exactly once, we simply check if the booking was added
         assertEquals(1, site.getBookings().size(), "A new booking should be added when the property is available");
     }
 
     @Test
     void testRequestBookingWhenPropertyIsNotAvailable() {
         Date checkInDate = new Date();
-        Date checkOutDate = new Date(checkInDate.getTime() + (1000 * 60 * 60 * 24)); // One day later
+        Date checkOutDate = new Date(checkInDate.getTime() + (1000 * 60 * 60 * 24));
 
         when(property.isAvailable()).thenReturn(false);
 

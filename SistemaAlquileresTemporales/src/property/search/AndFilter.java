@@ -11,7 +11,7 @@ public class AndFilter implements Filter {
 		this.setFilters(filters);
 	}
 	
-	List<Filter> getFilters() {
+	public List<Filter> getFilters() {
 		return filters;
 	}
 	

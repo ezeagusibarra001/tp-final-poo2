@@ -21,7 +21,6 @@ class FilterTest {
         mockFilter2 = mock(Filter.class);
     }
 
-    // Tests for AndFilter
 
     @Test
     void testAndFilterAddFilters() {
@@ -52,7 +51,6 @@ class FilterTest {
         assertEquals(filters, andFilter.getFilters(), "AndFilter should return the correct list of filters");
     }
 
-    // Tests for OrFilter
 
     @Test
     void testOrFilterAddFilters() {

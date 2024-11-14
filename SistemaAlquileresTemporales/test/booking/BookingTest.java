@@ -35,7 +35,7 @@ class BookingTest {
         owner = mock(Owner.class);
         property = mock(Property.class);
         checkInDate = new Date();
-        checkOutDate = new Date(checkInDate.getTime() + (1000 * 60 * 60 * 24)); // Un día después
+        checkOutDate = new Date(checkInDate.getTime() + (1000 * 60 * 60 * 24));
         booking = new Booking(tenant, owner, property, checkInDate, checkOutDate);
 
         tenantRanking = mock(Ranking.class);
@@ -82,10 +82,8 @@ class BookingTest {
         when(property.isAvailable()).thenReturn(false);
         List<Ranking> rankings = Arrays.asList(tenantRanking, ownerRanking, propertyRanking);
         
-        // First checkout to mark the booking as completed
         booking.makeCheckout(rankings);
 
-        // Attempting a second checkout should throw an exception
         Exception exception = assertThrows(IllegalStateException.class, () -> booking.makeCheckout(rankings));
         assertEquals("Reserva completada", exception.getMessage());
     }
@@ -98,13 +96,11 @@ class BookingTest {
 
     @Test
     void testGetTotalPrice() {
-        // Suponiendo que se implemente el método getTotalPrice en la clase Booking
         assertEquals(0, booking.getTotalPrice(), "Total price should be zero by default");
     }
 
     @Test
     void testGetDailyPrice() {
-        // Suponiendo que se implemente el método getDailyPrice en la clase Booking
         assertEquals(0, booking.getDailyPrice(), "Daily price should be zero by default");
     }
 }

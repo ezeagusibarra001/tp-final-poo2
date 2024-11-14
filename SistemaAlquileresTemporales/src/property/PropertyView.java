@@ -4,7 +4,7 @@ import java.util.List;
 import comment.*;
 
 public class PropertyView {
-	private Property property; // la visualizacion de los get/set property podria cambiar a default
+	private Property property;
 	private CommentManager commentManager;
 	
 	public PropertyView(Property property, CommentManager commentManager) {

@@ -26,7 +26,6 @@ class OwnerTest {
         property = mock(Property.class);
         stats = mock(Stats.class);
         
-        // Configura la propiedad mock para devolver stats
         when(property.getStats()).thenReturn(stats);
     }
 
@@ -73,25 +72,21 @@ class OwnerTest {
 
     @Test
     void testShowDetails() {
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-
-        // Configura el mock de stats para `showDetails` y `getTotalRentals`
         owner.setRegisterDate(LocalDate.now());
+        when(stats.showDetails()).thenReturn("Promedio por categoría:\nPromedio total: 0.0\nVeces que fue alquilado: 0");
         when(stats.getTotalRentals()).thenReturn(5);
         owner.addProperty(property);
 
-        owner.showDetails();
+        String output = owner.showDetails();
 
-        String expectedOutput = "Promedio por categoría:" + System.lineSeparator() +
-                                "Promedio total: 0.0" + System.lineSeparator() +
-                                "Veces que fue alquilado: 0" + System.lineSeparator() +
-                                "Fecha de registro: " + owner.getRegisterDate() + System.lineSeparator() +
-                                "Cantidad total de inmuebles alquilados: " + owner.getTotalRentals() + System.lineSeparator();
+        String expectedOutput = "Promedio por categoría:\n" +
+                                "Promedio total: 0.0\n" +
+                                "Veces que fue alquilado: 0\n" +
+                                "Fecha de registro: " + owner.getRegisterDate() + "\n" +
+                                "Cantidad total de inmuebles alquilados: " + owner.getTotalRentals();
 
-        assertEquals(expectedOutput, outContent.toString());
-
-        System.setOut(System.out);
+        assertEquals(expectedOutput, output, "La salida de showDetails debería coincidir con el formato esperado");
     }
+
 
 }
